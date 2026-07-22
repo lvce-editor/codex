@@ -6,6 +6,8 @@ export const name = 'codex.virtual-dom-view.start-session'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   await useMockDataAndShowCodex(Command, [])
+  const emptyTitle = Locator('text=No Codex sessions yet')
+  await expect(emptyTitle).toBeVisible()
   await Command.executeExtensionCommand('codex.newSession')
 
   const prompt = Locator('textarea[name="prompt"]')

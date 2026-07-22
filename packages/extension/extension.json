@@ -30,6 +30,7 @@
   "activation": [
     "onView:codex.views.sessions",
     "onCommand:codex.newSession",
+    "onCommand:codex.openSession",
     "onCommand:codex.refresh",
     "onCommand:codex.show",
     "onCommand:codex.startSession",
@@ -38,6 +39,7 @@
   "commands": [
     { "id": "codex.show", "label": "Codex: Show Sessions" },
     { "id": "codex.newSession", "label": "Codex: New Session" },
+    { "id": "codex.openSession", "label": "Codex: Open Session by ID" },
     { "id": "codex.startSession", "label": "Codex: Start Session" },
     { "id": "codex.stopSession", "label": "Codex: Stop Session" },
     { "id": "codex.refresh", "label": "Codex: Refresh Sessions" }

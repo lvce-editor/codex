@@ -10,10 +10,11 @@ export const name = 'codex.virtual-dom-view.stop-session'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   await useMockDataAndShowCodex(Command, createSessions(1, activeStatus))
+  const status = Locator('.CodexStatus')
+  await expect(status).toHaveText('In progress')
 
   await Command.executeExtensionCommand('codex.stopSession', 'thread-1')
 
-  const status = Locator('.CodexStatus')
   const remainingStop = Locator('button[name="stop:thread-1"]')
   await expect(status).toHaveText('Finished')
   await expect(remainingStop).toHaveCount(0)

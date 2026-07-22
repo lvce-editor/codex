@@ -12,8 +12,10 @@ export const view: View<ActiveCodexViewInstance> = {
       instance.newSession()
       return instance
     },
-    'codex.openSession': async (instance, threadId: string) => {
-      await instance.openSession(threadId)
+    'codex.openSession': async (instance, threadId?: string) => {
+      if (threadId) {
+        await instance.openSession(threadId)
+      }
       return instance
     },
     'codex.refresh': async (instance) => {
