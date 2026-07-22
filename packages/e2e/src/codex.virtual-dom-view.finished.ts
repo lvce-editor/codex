@@ -1,4 +1,5 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
+// eslint-disable-next-line e2e/no-imports
 import {
   createSessions,
   useMockDataAndShowCodex,
@@ -9,6 +10,8 @@ export const name = 'codex.virtual-dom-view.finished'
 export const test: Test = async ({ Command, expect, Locator }) => {
   await useMockDataAndShowCodex(Command, createSessions(1))
 
-  await expect(Locator('[name="status:thread-1"]')).toHaveText('Finished')
-  await expect(Locator('button[name="stop:thread-1"]')).toHaveCount(0)
+  const status = Locator('[name="status:thread-1"]')
+  const stop = Locator('button[name="stop:thread-1"]')
+  await expect(status).toHaveText('Finished')
+  await expect(stop).toHaveCount(0)
 }

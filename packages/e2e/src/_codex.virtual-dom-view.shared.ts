@@ -34,10 +34,11 @@ export interface MockTurn {
 }
 
 export const activeStatus: MockStatus = { activeFlags: [], type: 'active' }
+const finishedStatus: MockStatus = { type: 'idle' }
 
 export const createSession = (
   number: number,
-  status: MockStatus = { type: 'idle' },
+  status: MockStatus = finishedStatus,
 ): MockThread => ({
   cliVersion: 'mock-1.0.0',
   createdAt: 1_700_000_000 + number,
@@ -70,7 +71,7 @@ export const createSession = (
 
 export const createSessions = (
   count: number,
-  status: MockStatus = { type: 'idle' },
+  status: MockStatus = finishedStatus,
 ): readonly MockThread[] =>
   Array.from({ length: count }, (_, index) => createSession(index + 1, status))
 

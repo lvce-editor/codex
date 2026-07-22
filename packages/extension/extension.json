@@ -24,7 +24,7 @@
       "id": "builtin.codex.app-server",
       "type": "node",
       "name": "Codex App Server",
-      "url": "node/src/codexClient.js"
+      "url": "node/dist/codexClient.js"
     }
   ],
   "activation": [

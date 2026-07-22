@@ -1,4 +1,5 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
+// eslint-disable-next-line e2e/no-imports
 import {
   createSession,
   useMockDataAndShowCodex,
@@ -37,7 +38,10 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   // eslint-disable-next-line e2e/no-direct-click
   await session.click()
 
-  await expect(Locator('text=Fix the flaky test')).toBeVisible()
-  await expect(Locator('text=The flaky test is fixed.')).toBeVisible()
-  await expect(Locator('button[name="back"]')).toBeVisible()
+  const prompt = Locator('text=Fix the flaky test')
+  const response = Locator('text=The flaky test is fixed.')
+  const back = Locator('button[name="back"]')
+  await expect(prompt).toBeVisible()
+  await expect(response).toBeVisible()
+  await expect(back).toBeVisible()
 }

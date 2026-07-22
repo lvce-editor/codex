@@ -4,9 +4,9 @@
   "description": "Node app-server transport for the Codex extension",
   "license": "MIT",
   "type": "module",
-  "main": "src/codexClient.js",
+  "main": "src/codexClient.ts",
   "scripts": {
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^26.1.1"

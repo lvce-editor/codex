@@ -4,7 +4,8 @@ import fs from 'node:fs'
 import { createRequire } from 'node:module'
 import path, { join } from 'node:path'
 import { type Plugin, rollup } from 'rollup'
-import esbuild from 'rollup-plugin-esbuild'
+import { build as esbuildBuild } from 'esbuild'
+import esbuildPlugin from 'rollup-plugin-esbuild'
 import { root } from './root.ts'
 
 const extension = path.join(root, 'packages', 'extension')
@@ -23,9 +24,16 @@ fs.copyFileSync(
 )
 fs.copyFileSync(join(extension, 'codex.css'), join(root, 'dist', 'codex.css'))
 fs.copyFileSync(join(extension, 'codex.svg'), join(root, 'dist', 'codex.svg'))
-fs.cpSync(node, join(root, 'dist', 'node'), {
-  recursive: true,
-  verbatimSymlinks: true,
+await esbuildBuild({
+  bundle: false,
+  entryPoints: [
+    join(node, 'src', 'codexClient.ts'),
+    join(node, 'src', 'mockCodex.ts'),
+  ],
+  format: 'esm',
+  outdir: join(root, 'dist', 'node', 'dist'),
+  platform: 'node',
+  target: 'node24',
 })
 
 const bundle = await rollup({
@@ -36,7 +44,7 @@ const bundle = await rollup({
       browser: true,
     }),
     commonjs(),
-    esbuild({
+    esbuildPlugin({
       target: 'esnext',
     }),
   ],

@@ -1,4 +1,5 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
+// eslint-disable-next-line e2e/no-imports
 import {
   activeStatus,
   createSessions,
@@ -14,6 +15,8 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   // eslint-disable-next-line e2e/no-direct-click
   await stop.click()
 
-  await expect(Locator('[name="status:thread-1"]')).toHaveText('Finished')
-  await expect(Locator('button[name="stop:thread-1"]')).toHaveCount(0)
+  const status = Locator('[name="status:thread-1"]')
+  const remainingStop = Locator('button[name="stop:thread-1"]')
+  await expect(status).toHaveText('Finished')
+  await expect(remainingStop).toHaveCount(0)
 }

@@ -1,4 +1,5 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
+// eslint-disable-next-line e2e/no-imports
 import {
   createSession,
   useMockDataAndShowCodex,
@@ -18,10 +19,8 @@ export const test: Test = async ({ Command, expect, Locator }) => {
     }),
   ])
 
-  await expect(Locator('[name="status:thread-1"]')).toHaveText(
-    'Waiting for approval',
-  )
-  await expect(Locator('[name="status:thread-2"]')).toHaveText(
-    'Waiting for input',
-  )
+  const approval = Locator('[name="status:thread-1"]')
+  const userInput = Locator('[name="status:thread-2"]')
+  await expect(approval).toHaveText('Waiting for approval')
+  await expect(userInput).toHaveText('Waiting for input')
 }
