@@ -1,0 +1,22 @@
+import type { Test } from '@lvce-editor/test-with-playwright'
+// eslint-disable-next-line e2e/no-imports
+import {
+  activeStatus,
+  createSessions,
+  useMockDataAndShowCodex,
+} from './_codex.virtual-dom-view.shared.ts'
+
+export const name = 'codex.virtual-dom-view.active-detail-stop'
+
+export const test: Test = async ({ Command, expect, Locator }) => {
+  await useMockDataAndShowCodex(Command, createSessions(1, activeStatus))
+  await Command.executeExtensionCommand('codex.openSession', 'thread-1')
+
+  const status = Locator('.CodexStatus')
+  const stop = Locator('button[name="stop:thread-1"]')
+  await expect(status).toHaveText('In progress')
+  await Command.executeExtensionCommand('codex.stopSession', 'thread-1')
+
+  await expect(status).toHaveText('Finished')
+  await expect(stop).toHaveCount(0)
+}

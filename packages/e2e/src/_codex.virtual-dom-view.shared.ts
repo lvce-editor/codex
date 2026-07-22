@@ -23,7 +23,7 @@ export interface MockThread {
   readonly createdAt: number
   readonly cwd: string
   readonly id: string
-  readonly name: string
+  readonly name: string | null
   readonly preview: string
   readonly status: MockStatus
   readonly turns: readonly MockTurn[]
@@ -32,11 +32,11 @@ export interface MockThread {
 
 export interface MockTurn {
   readonly completedAt: number | null
-  readonly error: null
+  readonly error: { readonly message?: string } | null
   readonly id: string
   readonly items: readonly unknown[]
-  readonly startedAt: number
-  readonly status: 'completed' | 'inProgress' | 'interrupted'
+  readonly startedAt: number | null
+  readonly status: 'completed' | 'failed' | 'inProgress' | 'interrupted'
 }
 
 export const activeStatus: MockStatus = { activeFlags: [], type: 'active' }
