@@ -3,48 +3,71 @@
   color: var(--WorkbenchForeground, #cccccc);
   display: flex;
   flex-direction: column;
-  font-family: var(--EditorFontFamily, sans-serif);
+  font-family: var(--FontFamily, system-ui, Ubuntu, Droid Sans, sans-serif);
+  font-size: 13px;
   height: 100%;
   min-height: 0;
   overflow: hidden;
 }
 
+.CodexRoot button,
+.CodexRoot input,
+.CodexRoot textarea {
+  font-family: inherit;
+}
+
 .CodexHeader {
   align-items: center;
-  border-bottom: 1px solid var(--PanelBorder, rgba(128, 128, 128, 0.3));
   display: flex;
   flex: 0 0 auto;
-  gap: 12px;
+  gap: 8px;
   justify-content: space-between;
-  padding: 12px;
+  min-height: 38px;
+  padding: 6px 8px 4px 10px;
 }
 
 .CodexTitle,
 .CodexSessionTitle,
 .CodexEmptyTitle {
   color: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.4;
   margin: 0;
 }
 
+.CodexTitle {
+  color: var(--DescriptionForeground, #9d9d9d);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.CodexSessionTitle,
+.CodexEmptyTitle {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
 .CodexHeaderActions {
+  align-items: center;
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  gap: 2px;
   justify-content: flex-end;
+}
+
+.CodexButton,
+.CodexIconButton {
+  border: 1px solid transparent;
+  cursor: pointer;
+  font: inherit;
+  outline: none;
 }
 
 .CodexButton {
   background: var(--ButtonBackground, #0e639c);
-  border: 1px solid transparent;
-  border-radius: 3px;
+  border-radius: 6px;
   color: var(--ButtonForeground, #ffffff);
-  cursor: pointer;
-  font: inherit;
-  min-height: 26px;
-  padding: 4px 9px;
+  min-height: 28px;
+  padding: 4px 10px;
 }
 
 .CodexButton:hover {
@@ -52,12 +75,12 @@
 }
 
 .CodexButtonSecondary {
-  background: var(--ButtonSecondaryBackground, #3a3d41);
-  color: var(--ButtonSecondaryForeground, #ffffff);
+  background: transparent;
+  color: var(--WorkbenchForeground, #cccccc);
 }
 
 .CodexButtonSecondary:hover {
-  background: var(--ButtonSecondaryHoverBackground, #45494e);
+  background: var(--ToolbarHoverBackground, rgba(128, 128, 128, 0.18));
 }
 
 .CodexButtonDanger {
@@ -66,100 +89,255 @@
   color: var(--ErrorForeground, #f48771);
 }
 
+.CodexButton:focus-visible,
+.CodexIconButton:focus-visible,
+.CodexSessionOpen:focus-visible,
+.CodexQuickComposer:focus-visible {
+  outline: 1px solid var(--FocusBorder, #007fd4);
+  outline-offset: -1px;
+}
+
+.CodexIconButton {
+  align-items: center;
+  background: transparent;
+  border-radius: 5px;
+  color: var(--DescriptionForeground, #9d9d9d);
+  display: inline-flex;
+  height: 26px;
+  justify-content: center;
+  padding: 0;
+  width: 26px;
+}
+
+.CodexIconButton:hover {
+  background: var(--ToolbarHoverBackground, rgba(128, 128, 128, 0.18));
+  color: var(--WorkbenchForeground, #cccccc);
+}
+
+.CodexIconButton::before {
+  display: block;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.CodexRefreshButton::before {
+  content: '↻';
+}
+
+.CodexNewSessionButton::before {
+  content: '+';
+  font-size: 20px;
+}
+
+.CodexVisuallyHidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 .CodexSessionList,
 .CodexTranscript {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: 8px;
   min-height: 0;
   overflow: auto;
-  padding: 10px;
+}
+
+.CodexSessionList {
+  gap: 1px;
+  padding: 2px 4px 8px;
 }
 
 .CodexSession {
   align-items: stretch;
-  background: var(--SideBarSectionHeaderBackground, rgba(128, 128, 128, 0.08));
-  border: 1px solid var(--PanelBorder, rgba(128, 128, 128, 0.25));
-  border-radius: 5px;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
   display: flex;
-  gap: 6px;
-  padding: 4px;
+  min-width: 0;
+  padding: 0;
+  position: relative;
+}
+
+.CodexSession:hover,
+.CodexSession:focus-within {
+  background: var(--ListHoverBackground, rgba(128, 128, 128, 0.12));
 }
 
 .CodexSessionOpen {
   background: transparent;
   border: 0;
+  border-radius: 6px;
   color: inherit;
   cursor: pointer;
   flex: 1;
+  min-height: 30px;
   min-width: 0;
-  padding: 7px;
+  outline: none;
+  padding: 5px 8px;
   text-align: left;
-}
-
-.CodexSessionOpen:hover {
-  background: var(--ListHoverBackground, rgba(128, 128, 128, 0.12));
 }
 
 .CodexSessionTop {
   align-items: center;
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: space-between;
+  min-width: 0;
 }
 
 .CodexSessionTitle {
+  font-weight: 400;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .CodexSessionCwd,
+.CodexSessionTime {
+  display: none;
+}
+
 .CodexDetailCwd,
-.CodexSessionTime,
 .CodexDetailId,
 .CodexTurnTime {
   color: var(--DescriptionForeground, #9d9d9d);
   font-size: 11px;
-  margin: 4px 0 0;
+  margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.CodexSessionStop {
-  align-self: center;
-  flex: 0 0 auto;
-}
-
 .CodexStatus {
-  align-items: center;
   border: 1px solid currentColor;
-  border-radius: 999px;
-  display: inline-flex;
+  border-radius: 50%;
+  box-sizing: border-box;
+  color: var(--DescriptionForeground, #9d9d9d);
   flex: 0 0 auto;
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 16px;
-  padding: 0 7px;
+  font-size: 0;
+  height: 8px;
+  padding: 0;
+  width: 8px;
 }
 
 .CodexStatusRunning {
-  color: var(--TestingIconPassed, #73c991);
+  background: var(--ProgressBarBackground, #3794ff);
+  border-color: var(--ProgressBarBackground, #3794ff);
 }
 
 .CodexStatusWaiting {
-  color: var(--NotificationsWarningIconForeground, #cca700);
+  background: var(--NotificationsWarningIconForeground, #cca700);
+  border-color: var(--NotificationsWarningIconForeground, #cca700);
 }
 
 .CodexStatusFinished {
-  color: var(--DescriptionForeground, #9d9d9d);
+  background: transparent;
 }
 
-.CodexStatusError,
-.CodexErrorMessage {
+.CodexStatusError {
+  background: var(--ErrorForeground, #f48771);
+  border-color: var(--ErrorForeground, #f48771);
+}
+
+.CodexSessionStop {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
   color: var(--ErrorForeground, #f48771);
+  display: flex;
+  font-size: 0;
+  height: 24px;
+  justify-content: center;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  right: 4px;
+  top: 3px;
+  width: 24px;
+}
+
+.CodexSessionStop::before {
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  content: '';
+  height: 8px;
+  width: 8px;
+}
+
+.CodexSession:hover .CodexSessionStop,
+.CodexSession:focus-within .CodexSessionStop {
+  opacity: 1;
+}
+
+.CodexSession:has(.CodexSessionStop):hover .CodexStatus,
+.CodexSession:has(.CodexSessionStop):focus-within .CodexStatus {
+  visibility: hidden;
+}
+
+.CodexQuickComposer {
+  align-items: stretch;
+  background: var(--InputBackground, rgba(128, 128, 128, 0.08));
+  border: 1px solid var(--InputBorder, rgba(128, 128, 128, 0.28));
+  border-radius: 16px;
+  color: inherit;
+  cursor: text;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  margin: 10px 12px 14px;
+  min-height: 96px;
+  outline: none;
+  padding: 12px;
+  text-align: left;
+}
+
+.CodexQuickComposer:hover {
+  border-color: var(--DescriptionForeground, #9d9d9d);
+}
+
+.CodexQuickComposerPlaceholder {
+  color: var(--InputPlaceholderForeground, #a6a6a6);
+  line-height: 20px;
+}
+
+.CodexQuickComposerFooter {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.CodexQuickComposerAdd {
+  color: var(--DescriptionForeground, #9d9d9d);
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 20px;
+}
+
+.CodexQuickComposerHint {
+  color: var(--DescriptionForeground, #9d9d9d);
+  flex: 1;
+  font-size: 11px;
+}
+
+.CodexQuickComposerSubmit {
+  align-items: center;
+  background: var(--ButtonBackground, #0e639c);
+  border-radius: 50%;
+  color: var(--ButtonForeground, #ffffff);
+  display: flex;
+  font-size: 14px;
+  height: 26px;
+  justify-content: center;
+  width: 26px;
 }
 
 .CodexEmpty,
@@ -168,7 +346,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   justify-content: center;
   padding: 20px;
 }
@@ -184,6 +362,10 @@
   color: var(--DescriptionForeground, #9d9d9d);
   line-height: 1.5;
   margin: 0;
+}
+
+.CodexErrorMessage {
+  color: var(--ErrorForeground, #f48771);
 }
 
 .CodexLoading {
@@ -207,7 +389,7 @@
 }
 
 .CodexError {
-  padding: 12px;
+  padding: 6px 10px;
 }
 
 @keyframes CodexSpinnerRotate {
@@ -220,21 +402,21 @@
   display: flex;
   flex-direction: column;
   font-size: 12px;
-  font-weight: 600;
-  gap: 6px;
+  font-weight: 500;
+  gap: 7px;
 }
 
 .CodexInput,
 .CodexTextArea {
   background: var(--InputBackground, #3c3c3c);
-  border: 1px solid var(--InputBorder, transparent);
-  border-radius: 3px;
+  border: 1px solid var(--InputBorder, rgba(128, 128, 128, 0.28));
+  border-radius: 8px;
   box-sizing: border-box;
   color: var(--InputForeground, #cccccc);
   font: inherit;
   font-weight: normal;
   outline: none;
-  padding: 7px 8px;
+  padding: 8px 10px;
   width: 100%;
 }
 
@@ -244,7 +426,7 @@
 }
 
 .CodexTextArea {
-  min-height: 140px;
+  min-height: 150px;
   resize: vertical;
 }
 
@@ -253,21 +435,24 @@
 }
 
 .CodexDetailMeta {
-  align-items: flex-start;
+  align-items: center;
   border-bottom: 1px solid var(--PanelBorder, rgba(128, 128, 128, 0.25));
   display: flex;
   flex: 0 0 auto;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px 12px;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: 4px 10px 10px;
+}
+
+.CodexTranscript {
+  gap: 18px;
+  padding: 14px 12px;
 }
 
 .CodexTurn {
-  border-left: 2px solid var(--PanelBorder, rgba(128, 128, 128, 0.35));
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding-left: 10px;
+  gap: 10px;
 }
 
 .CodexTurnHeader {
@@ -280,26 +465,32 @@
 .CodexTranscriptLabel {
   color: var(--DescriptionForeground, #9d9d9d);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
 }
 
 .CodexTranscriptItem {
-  background: var(--EditorWidgetBackground, rgba(128, 128, 128, 0.08));
-  border-radius: 4px;
-  padding: 9px;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .CodexTranscriptItemuserMessage {
-  border-left: 2px solid var(--FocusBorder, #007fd4);
+  background: var(--EditorWidgetBackground, rgba(128, 128, 128, 0.1));
 }
 
-.CodexTranscriptItemagentMessage {
-  border-left: 2px solid var(--TestingIconPassed, #73c991);
+.CodexTranscriptItemagentMessage,
+.CodexTranscriptItemplan {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.CodexTranscriptItemcommandExecution {
+  background: var(--TextCodeBlockBackground, rgba(128, 128, 128, 0.08));
+  font-family: var(--EditorFontFamily, monospace);
 }
 
 .CodexTranscriptText {
-  line-height: 1.5;
+  line-height: 1.55;
   margin: 5px 0 0;
   overflow-wrap: anywhere;
   white-space: pre-wrap;

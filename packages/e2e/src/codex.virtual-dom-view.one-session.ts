@@ -13,7 +13,12 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   const sessions = Locator('.CodexSession')
   const title = Locator('text=Session 1')
   const cwd = Locator('text=/workspace/project-1')
+  const quickComposer = Locator('.CodexQuickComposer')
+  const toolbarActions = Locator('.CodexIconButton')
   await expect(sessions).toHaveCount(1)
   await expect(title).toBeVisible()
-  await expect(cwd).toBeVisible()
+  await expect(cwd).toHaveCount(1)
+  await expect(toolbarActions).toHaveCount(2)
+  await expect(quickComposer).toBeVisible()
+  await expect(quickComposer).toHaveText('Do anything+New session↑')
 }
