@@ -1,0 +1,70 @@
+{
+  "id": "builtin.codex",
+  "name": "Codex",
+  "workerName": "Codex Worker",
+  "description": "Work with local Codex sessions in Lvce Editor",
+  "repository": "https://github.com/lvce-editor/codex",
+  "browser": "dist/codexMain.js",
+  "isolated": true,
+  "categories": ["Other"],
+  "configuration": {
+    "codex.path": {
+      "type": "string",
+      "default": "codex",
+      "description": "Path to the Codex CLI executable."
+    },
+    "codex.refreshInterval": {
+      "type": "number",
+      "default": 1000,
+      "description": "How often active session statuses are refreshed, in milliseconds."
+    }
+  },
+  "rpc": [
+    {
+      "id": "builtin.codex.app-server",
+      "type": "node",
+      "name": "Codex App Server",
+      "url": "node/dist/codexClient.js"
+    }
+  ],
+  "activation": [
+    "onView:codex.views.sessions",
+    "onCommand:codex.newSession",
+    "onCommand:codex.openSession",
+    "onCommand:codex.refresh",
+    "onCommand:codex.show",
+    "onCommand:codex.startSession",
+    "onCommand:codex.stopSession"
+  ],
+  "commands": [
+    { "id": "codex.show", "label": "Codex: Show Sessions" },
+    { "id": "codex.newSession", "label": "Codex: New Session" },
+    { "id": "codex.openSession", "label": "Codex: Open Session by ID" },
+    { "id": "codex.startSession", "label": "Codex: Start Session" },
+    { "id": "codex.stopSession", "label": "Codex: Stop Session" },
+    { "id": "codex.refresh", "label": "Codex: Refresh Sessions" }
+  ],
+  "views": [
+    {
+      "css": "codex.css",
+      "displayName": "Codex",
+      "id": "codex.views.sessions",
+      "title": "Codex",
+      "icon": "codex.svg",
+      "kind": "virtualDom",
+      "showSideBarHeader": false
+    }
+  ],
+  "keybindings": [
+    {
+      "key": "Ctrl+N",
+      "command": "codex.newSession",
+      "when": "codex.sessionsFocus"
+    },
+    {
+      "key": "Escape",
+      "command": "codex.show",
+      "when": "codex.sessionDetailFocus"
+    }
+  ]
+}

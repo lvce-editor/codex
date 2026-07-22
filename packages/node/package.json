@@ -1,0 +1,14 @@
+{
+  "name": "builtin.codex-node",
+  "version": "0.0.0-dev",
+  "description": "Node app-server transport for the Codex extension",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/codexClient.ts",
+  "scripts": {
+    "test": "node --test test/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1"
+  }
+}
