@@ -89,6 +89,16 @@ const renderHeader = (title: string, actions: readonly TreeNode[]): TreeNode =>
     div('CodexHeaderActions', actions),
   ])
 
+const renderLoading = (): TreeNode =>
+  div(
+    'CodexLoading',
+    [
+      div('CodexSpinner', []),
+      paragraph('CodexLoadingLabel', 'Loading sessions…'),
+    ],
+    { ariaLabel: 'Loading Codex sessions', role: 'status' },
+  )
+
 const renderList = (state: Readonly<CodexViewState>): TreeNode => {
   const content =
     state.sessions.length > 0
@@ -119,7 +129,7 @@ const renderList = (state: Readonly<CodexViewState>): TreeNode => {
       ? [div('CodexError', [paragraph('CodexErrorMessage', state.error)])]
       : []),
     ...(state.loading && state.sessions.length === 0
-      ? [paragraph('CodexLoading', 'Loading sessions…')]
+      ? [renderLoading()]
       : [content]),
   ])
 }

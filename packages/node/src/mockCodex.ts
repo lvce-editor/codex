@@ -32,6 +32,7 @@ interface MockThread {
 }
 
 interface MockData {
+  readonly listDelayMs?: number
   readonly pageSize?: number
   readonly threads?: readonly MockThread[]
 }
@@ -58,6 +59,7 @@ const threads: MockThread[] = structuredClone(
   Array.isArray(data.threads) ? data.threads : [],
 )
 const pageSize = Math.max(1, Number(data.pageSize) || 100)
+const listDelayMs = Math.max(0, Number(data.listDelayMs) || 0)
 const counters = {
   thread: threads.length + 1,
   turn: 1,
@@ -97,13 +99,21 @@ const handleRequest = (message: Readonly<IncomingMessage>): void => {
   if (method === 'thread/list') {
     const start = Number(params.cursor) || 0
     const limit = Math.min(Number(params.limit) || pageSize, pageSize)
-    const page = threads.slice(start, start + limit)
+    const sortedThreads =
+      params.sortDirection === 'desc'
+        ? threads.toSorted((a, b) => b.updatedAt - a.updatedAt)
+        : threads
+    const page = sortedThreads.slice(start, start + limit)
     const next = start + page.length
-    sendResult(id, {
-      backwardsCursor: page.length > 0 ? String(start) : null,
-      data: page.map(copyForList),
-      nextCursor: next < threads.length ? String(next) : null,
-    })
+    globalThis.setTimeout(
+      () =>
+        sendResult(id, {
+          backwardsCursor: page.length > 0 ? String(start) : null,
+          data: page.map(copyForList),
+          nextCursor: next < sortedThreads.length ? String(next) : null,
+        }),
+      listDelayMs,
+    )
     return
   }
   if (method === 'thread/read') {

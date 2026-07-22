@@ -2,6 +2,12 @@ import type { TestApi } from '@lvce-editor/test-with-playwright'
 
 type Command = TestApi['Command']
 
+export interface MockOptions {
+  readonly listDelayMs?: number
+  readonly pageSize?: number
+  readonly waitForData?: boolean
+}
+
 export type MockStatus =
   | { readonly type: 'idle' | 'notLoaded' | 'systemError' }
   | {
@@ -78,10 +84,15 @@ export const createSessions = (
 export const useMockDataAndShowCodex = async (
   Command: Command,
   threads: readonly MockThread[],
-  pageSize?: number,
+  options: Readonly<MockOptions> = {},
 ): Promise<void> => {
+  const { waitForData = true, ...mockOptions } = options
   await Command.executeExtensionCommand('codex.show', {
-    ...(pageSize && { pageSize }),
+    ...mockOptions,
     threads,
   })
+  if (waitForData) {
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    await Command.executeExtensionCommand('codex.refresh')
+  }
 }

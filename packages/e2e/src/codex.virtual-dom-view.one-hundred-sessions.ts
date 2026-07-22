@@ -5,15 +5,17 @@ import {
   useMockDataAndShowCodex,
 } from './_codex.virtual-dom-view.shared.ts'
 
-export const name = 'codex.virtual-dom-view.one-hundred-sessions'
+export const name = 'codex.virtual-dom-view.limits-one-hundred-sessions'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
-  await useMockDataAndShowCodex(Command, createSessions(100), 7)
+  await useMockDataAndShowCodex(Command, createSessions(100))
 
   const sessions = Locator('.CodexSession')
-  const first = Locator('button[name="session:thread-1"]')
-  const last = Locator('button[name="session:thread-100"]')
-  await expect(sessions).toHaveCount(100)
-  await expect(first).toBeVisible()
-  await expect(last).toHaveCount(1)
+  const newest = Locator('button[name="session:thread-100"]')
+  const oldestVisible = Locator('button[name="session:thread-51"]')
+  const olderSession = Locator('button[name="session:thread-50"]')
+  await expect(sessions).toHaveCount(50)
+  await expect(newest).toBeVisible()
+  await expect(oldestVisible).toHaveCount(1)
+  await expect(olderSession).toHaveCount(0)
 }

@@ -63,10 +63,12 @@ export const createInstance = async (
     starting: false,
     stoppingThreadId: '',
   }
-  let client = await dependencyState.factory()
+  let clientPromise = dependencyState.factory()
   let disposed = false
-  let polling = false
+  let loadPromise: Promise<void> | undefined
   let pollTimer: ReturnType<typeof setInterval> | undefined
+
+  const getClient = (): Promise<CodexClient> => clientPromise
 
   const requestRerender = (): void => {
     if (!context?.requestRerender || disposed) {
@@ -76,35 +78,45 @@ export const createInstance = async (
   }
 
   const loadSessions = async (showLoading: boolean): Promise<void> => {
-    if (polling || disposed) {
+    if (disposed) {
       return
     }
-    polling = true
+    if (loadPromise) {
+      await loadPromise
+      return
+    }
     if (showLoading) {
       state.loading = true
       requestRerender()
     }
-    try {
-      state.sessions = await client.listSessions()
-      state.error = ''
-      if (state.selectedSession) {
-        const updated = state.sessions.find(
-          (thread) => thread.id === state.selectedSession?.id,
-        )
-        if (updated) {
-          state.selectedSession = {
-            ...state.selectedSession,
-            ...updated,
-            turns: state.selectedSession.turns,
+    const currentLoad = (async (): Promise<void> => {
+      try {
+        const client = await getClient()
+        state.sessions = await client.listSessions()
+        state.error = ''
+        if (state.selectedSession) {
+          const updated = state.sessions.find(
+            (thread) => thread.id === state.selectedSession?.id,
+          )
+          if (updated) {
+            state.selectedSession = {
+              ...state.selectedSession,
+              ...updated,
+              turns: state.selectedSession.turns,
+            }
           }
         }
+      } catch (error) {
+        state.error = getErrorMessage(error)
+      } finally {
+        state.loading = false
+        requestRerender()
       }
-    } catch (error) {
-      state.error = getErrorMessage(error)
-    } finally {
-      polling = false
-      state.loading = false
-      requestRerender()
+    })()
+    loadPromise = currentLoad
+    await currentLoad
+    if (loadPromise === currentLoad) {
+      loadPromise = undefined
     }
   }
 
@@ -121,6 +133,15 @@ export const createInstance = async (
     pollTimer = globalThis.setInterval(() => void loadSessions(false), interval)
   }
 
+  const disposeClient = async (): Promise<void> => {
+    try {
+      const client = await getClient()
+      await client.dispose()
+    } catch {
+      // Initialization errors are already displayed by loadSessions.
+    }
+  }
+
   const instance: ActiveCodexViewInstance = {
     async dispose(): Promise<void> {
       disposed = true
@@ -128,7 +149,7 @@ export const createInstance = async (
       if (pollTimer) {
         clearInterval(pollTimer)
       }
-      await client.dispose()
+      await disposeClient()
     },
     getContext(): Readonly<Record<string, boolean>> {
       return {
@@ -189,6 +210,7 @@ export const createInstance = async (
       state.loading = true
       requestRerender()
       try {
+        const client = await getClient()
         state.selectedSession = await client.readSession(threadId)
         state.mode = 'detail'
         state.error = ''
@@ -203,6 +225,7 @@ export const createInstance = async (
       await loadSessions(true)
       if (state.mode === 'detail' && state.selectedSession) {
         try {
+          const client = await getClient()
           state.selectedSession = await client.readSession(
             state.selectedSession.id,
           )
@@ -213,8 +236,8 @@ export const createInstance = async (
       }
     },
     async reload(): Promise<void> {
-      await client.dispose()
-      client = await dependencyState.factory()
+      await disposeClient()
+      clientPromise = dependencyState.factory()
       state.mode = 'list'
       state.selectedSession = undefined
       await loadSessions(true)
@@ -233,6 +256,7 @@ export const createInstance = async (
       state.error = ''
       requestRerender()
       try {
+        const client = await getClient()
         const thread = await client.startSession({ cwd: state.cwd, prompt })
         state.selectedSession = await client.readSession(thread.id)
         state.mode = 'detail'
@@ -254,6 +278,7 @@ export const createInstance = async (
       state.error = ''
       requestRerender()
       try {
+        const client = await getClient()
         await client.stopSession(id)
         await loadSessions(false)
         if (state.selectedSession?.id === id) {
@@ -267,6 +292,12 @@ export const createInstance = async (
       }
     },
     async useMockData(data: Readonly<MockCodexData>): Promise<void> {
+      if (pollTimer) {
+        clearInterval(pollTimer)
+        pollTimer = undefined
+      }
+      await loadPromise
+      const client = await getClient()
       await client.useMockData(data)
       state.mode = 'list'
       state.selectedSession = undefined
@@ -275,7 +306,11 @@ export const createInstance = async (
   }
 
   activeInstances.add(instance)
-  await Promise.all([loadWorkspace(), loadSessions(false)])
-  await startPolling()
+  void (async (): Promise<void> => {
+    await Promise.all([loadWorkspace(), loadSessions(false)])
+    if (!disposed) {
+      await startPolling()
+    }
+  })()
   return instance
 }
