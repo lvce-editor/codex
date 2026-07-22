@@ -1,4 +1,4 @@
-import type { MockData } from './mockCodexTypes.ts'
+import type { MockData } from '../MockCodexTypes/MockCodexTypes.ts'
 
 export const decodeMockData = (value: string | undefined): MockData => {
   if (!value) {

@@ -3,9 +3,9 @@ import type {
   AppServerMessage,
   CodexAppServerClientOptions,
   SpawnProcess,
-} from './appServerTypes.ts'
-import { asRecord, toError } from './appServerProtocol.ts'
-import { JsonLineDecoder } from './jsonLineDecoder.ts'
+} from '../AppServerTypes/AppServerTypes.ts'
+import { asRecord, toError } from '../AppServerProtocol/AppServerProtocol.ts'
+import { JsonLineDecoder } from '../JsonLineDecoder/JsonLineDecoder.ts'
 
 interface AppServerConnectionOptions extends CodexAppServerClientOptions {
   readonly onNotification: (message: Readonly<AppServerMessage>) => void

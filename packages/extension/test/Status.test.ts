@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
-import { getDisplayStatus } from '../src/parts/CodexView/Status.ts'
+import { getDisplayStatus } from '../src/parts/Status/Status.ts'
 
 describe('Codex session status', () => {
   test('shows active sessions as in progress', () => {

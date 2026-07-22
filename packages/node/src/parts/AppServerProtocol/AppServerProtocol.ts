@@ -1,4 +1,4 @@
-import type { CodexThread } from './appServerTypes.ts'
+import type { CodexThread } from '../AppServerTypes/AppServerTypes.ts'
 
 export const asRecord = (value: unknown): Readonly<Record<string, unknown>> => {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {

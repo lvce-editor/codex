@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import type { CodexThread } from '../src/appServerTypes.ts'
-import { ThreadStatuses } from '../src/threadStatuses.ts'
+import type { CodexThread } from '../src/parts/AppServerTypes/AppServerTypes.ts'
+import { ThreadStatuses } from '../src/parts/ThreadStatuses/ThreadStatuses.ts'
 
 const thread: CodexThread = {
   id: 'thread-1',

@@ -10,10 +10,10 @@ import type {
   ThreadListResponse,
   ThreadReadResponse,
   ThreadStartResponse,
-} from './appServerTypes.ts'
-import { AppServerConnection } from './appServerConnection.ts'
-import { asThread } from './appServerProtocol.ts'
-import { ThreadStatuses } from './threadStatuses.ts'
+} from './parts/AppServerTypes/AppServerTypes.ts'
+import { AppServerConnection } from './parts/AppServerConnection/AppServerConnection.ts'
+import { asThread } from './parts/AppServerProtocol/AppServerProtocol.ts'
+import { ThreadStatuses } from './parts/ThreadStatuses/ThreadStatuses.ts'
 
 const sourceIsTypeScript = import.meta.url.endsWith('.ts')
 const mockCodexPath = fileURLToPath(

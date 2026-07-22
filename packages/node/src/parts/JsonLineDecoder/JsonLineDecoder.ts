@@ -1,4 +1,4 @@
-import type { AppServerMessage } from './appServerTypes.ts'
+import type { AppServerMessage } from '../AppServerTypes/AppServerTypes.ts'
 
 export class JsonLineDecoder {
   private buffer = ''

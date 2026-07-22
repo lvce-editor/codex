@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { asRecord, asThread, toError } from '../src/appServerProtocol.ts'
+import {
+  asRecord,
+  asThread,
+  toError,
+} from '../src/parts/AppServerProtocol/AppServerProtocol.ts'
 
 void test('accepts protocol records', () => {
   const value = { id: 'thread-1', status: { type: 'idle' } }

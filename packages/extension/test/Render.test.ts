@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals'
 import type { CodexThread } from '../src/parts/CodexTypes/CodexTypes.ts'
-import { render } from '../src/parts/CodexView/Render.ts'
+import { render } from '../src/parts/Render/Render.ts'
 
 const thread: CodexThread = {
   cliVersion: '0.1.0',

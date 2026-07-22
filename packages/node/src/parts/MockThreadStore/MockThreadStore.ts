@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
-import type { MockThread, MockTurn } from './mockCodexTypes.ts'
+import type { MockThread, MockTurn } from '../MockCodexTypes/MockCodexTypes.ts'
 
 interface MockThreadPage {
   readonly backwardsCursor: string | null
