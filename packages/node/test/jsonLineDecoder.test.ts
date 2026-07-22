@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { JsonLineDecoder } from '../src/jsonLineDecoder.ts'
+import { JsonLineDecoder } from '../src/parts/JsonLineDecoder/JsonLineDecoder.ts'
 
 void test('decodes messages split across chunks', () => {
   const decoder = new JsonLineDecoder()

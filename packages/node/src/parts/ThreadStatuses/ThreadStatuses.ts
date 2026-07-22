@@ -2,8 +2,8 @@ import type {
   AppServerMessage,
   CodexThread,
   ThreadStatus,
-} from './appServerTypes.ts'
-import { asThread } from './appServerProtocol.ts'
+} from '../AppServerTypes/AppServerTypes.ts'
+import { asThread } from '../AppServerProtocol/AppServerProtocol.ts'
 
 export class ThreadStatuses {
   private readonly statuses = new Map<string, ThreadStatus>()

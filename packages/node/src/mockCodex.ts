@@ -1,5 +1,5 @@
-import { decodeMockData } from './mockCodexData.ts'
-import { MockCodexServer } from './mockCodexServer.ts'
+import { decodeMockData } from './parts/MockCodexData/MockCodexData.ts'
+import { MockCodexServer } from './parts/MockCodexServer/MockCodexServer.ts'
 
 const server = new MockCodexServer(decodeMockData(process.argv[2]))
 

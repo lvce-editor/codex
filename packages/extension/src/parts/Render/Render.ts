@@ -18,7 +18,7 @@ import {
   textNode,
   type TreeNode,
 } from '../VirtualDom/VirtualDom.ts'
-import { getDisplayStatus, isActive } from './Status.ts'
+import { getDisplayStatus, isActive } from '../Status/Status.ts'
 
 const upperCaseLetterRegex = /([A-Z])/g
 

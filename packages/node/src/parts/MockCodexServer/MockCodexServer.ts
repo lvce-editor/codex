@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import { createInterface } from 'node:readline'
-import type { IncomingMessage, MockData } from './mockCodexTypes.ts'
-import { MockThreadStore } from './mockThreadStore.ts'
+import type { IncomingMessage, MockData } from '../MockCodexTypes/MockCodexTypes.ts'
+import { MockThreadStore } from '../MockThreadStore/MockThreadStore.ts'
 
 export class MockCodexServer {
   private readonly listDelayMs: number

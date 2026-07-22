@@ -2,7 +2,7 @@ import type { View } from '@lvce-editor/api'
 import {
   createInstance,
   type ActiveCodexViewInstance,
-} from './CreateInstance.ts'
+} from '../CreateInstance/CreateInstance.ts'
 
 export const viewId = 'codex.views.sessions'
 
@@ -39,4 +39,4 @@ export const view: View<ActiveCodexViewInstance> = {
   title: 'Codex',
 }
 
-export { useMockData } from './CreateInstance.ts'
+export { useMockData } from '../CreateInstance/CreateInstance.ts'

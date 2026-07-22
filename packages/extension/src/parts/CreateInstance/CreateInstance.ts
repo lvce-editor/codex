@@ -11,7 +11,7 @@ import {
   createCodexClient,
   type CodexClient,
 } from '../CodexClient/CodexClient.ts'
-import { render, type CodexViewState } from './Render.ts'
+import { render, type CodexViewState } from '../Render/Render.ts'
 
 export interface ActiveCodexViewInstance extends VirtualDomViewInstance {
   readonly newSession: () => void
