@@ -41,6 +41,21 @@ test('renders session names, status, and working directory', () => {
   expect(nodes).toContainEqual(
     expect.objectContaining({ name: 'stop:thread-1' }),
   )
+  expect(nodes).toContainEqual(
+    expect.objectContaining({
+      ariaLabel: 'Refresh sessions',
+      className: 'CodexIconButton CodexRefreshButton',
+      name: 'refresh',
+    }),
+  )
+  expect(nodes).toContainEqual(
+    expect.objectContaining({
+      ariaLabel: 'Start a new Codex session',
+      className: 'CodexQuickComposer',
+      name: 'newSession',
+    }),
+  )
+  expect(getText(nodes)).toContain('Do anything')
 })
 
 test('renders a session transcript', () => {

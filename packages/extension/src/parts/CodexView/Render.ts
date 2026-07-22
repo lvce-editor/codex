@@ -50,7 +50,12 @@ const renderStatus = (thread: Readonly<CodexThread>): TreeNode => {
     VirtualDomElements.Span,
     `CodexStatus CodexStatus${status.className}`,
     [textNode(status.label)],
-    { name: `status:${thread.id}` },
+    {
+      ariaLabel: status.label,
+      name: `status:${thread.id}`,
+      role: 'status',
+      title: status.label,
+    },
   )
 }
 
@@ -70,7 +75,11 @@ const renderSession = (
         paragraph('CodexSessionCwd', thread.cwd),
         span('CodexSessionTime', formatTime(thread.updatedAt)),
       ],
-      { name: `session:${thread.id}`, onClick: 'handleClick' },
+      {
+        name: `session:${thread.id}`,
+        onClick: 'handleClick',
+        title: `${getTitle(thread)} — ${thread.cwd}`,
+      },
     ),
     ...(isActive(thread.status)
       ? [
@@ -88,6 +97,38 @@ const renderHeader = (title: string, actions: readonly TreeNode[]): TreeNode =>
     heading(2, 'CodexTitle', title),
     div('CodexHeaderActions', actions),
   ])
+
+const iconButton = (
+  name: string,
+  label: string,
+  iconClassName: string,
+): TreeNode =>
+  element(
+    VirtualDomElements.Button,
+    `CodexIconButton ${iconClassName}`,
+    [span('CodexVisuallyHidden', label)],
+    { ariaLabel: label, name, onClick: 'handleClick', title: label },
+  )
+
+const renderQuickComposer = (): TreeNode =>
+  element(
+    VirtualDomElements.Button,
+    'CodexQuickComposer',
+    [
+      span('CodexQuickComposerPlaceholder', 'Do anything'),
+      div('CodexQuickComposerFooter', [
+        span('CodexQuickComposerAdd', '+'),
+        span('CodexQuickComposerHint', 'New session'),
+        span('CodexQuickComposerSubmit', '↑'),
+      ]),
+    ],
+    {
+      ariaLabel: 'Start a new Codex session',
+      name: 'newSession',
+      onClick: 'handleClick',
+      title: 'Start a new Codex session',
+    },
+  )
 
 const renderLoading = (): TreeNode =>
   div(
@@ -114,16 +155,11 @@ const renderList = (state: Readonly<CodexViewState>): TreeNode => {
             'CodexEmptyText',
             'Start a session to ask Codex to work in this workspace.',
           ),
-          button(
-            'newSession',
-            'Start a session',
-            'CodexButton CodexButtonPrimary',
-          ),
         ])
   return div('CodexRoot', [
-    renderHeader('Codex', [
-      button('refresh', 'Refresh', 'CodexButton CodexButtonSecondary'),
-      button('newSession', 'New session', 'CodexButton CodexButtonPrimary'),
+    renderHeader('Chats', [
+      iconButton('refresh', 'Refresh sessions', 'CodexRefreshButton'),
+      iconButton('newSession', 'New session', 'CodexNewSessionButton'),
     ]),
     ...(state.error
       ? [div('CodexError', [paragraph('CodexErrorMessage', state.error)])]
@@ -131,6 +167,9 @@ const renderList = (state: Readonly<CodexViewState>): TreeNode => {
     ...(state.loading && state.sessions.length === 0
       ? [renderLoading()]
       : [content]),
+    ...(!state.loading || state.sessions.length > 0
+      ? [renderQuickComposer()]
+      : []),
   ])
 }
 
