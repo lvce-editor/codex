@@ -1,0 +1,281 @@
+.CodexRoot {
+  box-sizing: border-box;
+  color: var(--WorkbenchForeground, #cccccc);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--EditorFontFamily, sans-serif);
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.CodexHeader {
+  align-items: center;
+  border-bottom: 1px solid var(--PanelBorder, rgba(128, 128, 128, 0.3));
+  display: flex;
+  flex: 0 0 auto;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.CodexTitle,
+.CodexSessionTitle,
+.CodexEmptyTitle {
+  color: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.CodexHeaderActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.CodexButton {
+  background: var(--ButtonBackground, #0e639c);
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--ButtonForeground, #ffffff);
+  cursor: pointer;
+  font: inherit;
+  min-height: 26px;
+  padding: 4px 9px;
+}
+
+.CodexButton:hover {
+  background: var(--ButtonHoverBackground, #1177bb);
+}
+
+.CodexButtonSecondary {
+  background: var(--ButtonSecondaryBackground, #3a3d41);
+  color: var(--ButtonSecondaryForeground, #ffffff);
+}
+
+.CodexButtonSecondary:hover {
+  background: var(--ButtonSecondaryHoverBackground, #45494e);
+}
+
+.CodexButtonDanger {
+  background: transparent;
+  border-color: var(--InputValidationErrorBorder, #be1100);
+  color: var(--ErrorForeground, #f48771);
+}
+
+.CodexSessionList,
+.CodexTranscript {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  overflow: auto;
+  padding: 10px;
+}
+
+.CodexSession {
+  align-items: stretch;
+  background: var(--SideBarSectionHeaderBackground, rgba(128, 128, 128, 0.08));
+  border: 1px solid var(--PanelBorder, rgba(128, 128, 128, 0.25));
+  border-radius: 5px;
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+}
+
+.CodexSessionOpen {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+  padding: 7px;
+  text-align: left;
+}
+
+.CodexSessionOpen:hover {
+  background: var(--ListHoverBackground, rgba(128, 128, 128, 0.12));
+}
+
+.CodexSessionTop {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.CodexSessionTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.CodexSessionCwd,
+.CodexDetailCwd,
+.CodexSessionTime,
+.CodexDetailId,
+.CodexTurnTime {
+  color: var(--DescriptionForeground, #9d9d9d);
+  font-size: 11px;
+  margin: 4px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.CodexSessionStop {
+  align-self: center;
+  flex: 0 0 auto;
+}
+
+.CodexStatus {
+  align-items: center;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 16px;
+  padding: 0 7px;
+}
+
+.CodexStatusRunning {
+  color: var(--TestingIconPassed, #73c991);
+}
+
+.CodexStatusWaiting {
+  color: var(--NotificationsWarningIconForeground, #cca700);
+}
+
+.CodexStatusFinished {
+  color: var(--DescriptionForeground, #9d9d9d);
+}
+
+.CodexStatusError,
+.CodexErrorMessage {
+  color: var(--ErrorForeground, #f48771);
+}
+
+.CodexEmpty,
+.CodexComposer {
+  align-items: stretch;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.CodexEmpty {
+  align-items: center;
+  text-align: center;
+}
+
+.CodexEmptyText,
+.CodexLoading,
+.CodexErrorMessage {
+  color: var(--DescriptionForeground, #9d9d9d);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.CodexLoading,
+.CodexError {
+  padding: 12px;
+}
+
+.CodexLabel {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  font-weight: 600;
+  gap: 6px;
+}
+
+.CodexInput,
+.CodexTextArea {
+  background: var(--InputBackground, #3c3c3c);
+  border: 1px solid var(--InputBorder, transparent);
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: var(--InputForeground, #cccccc);
+  font: inherit;
+  font-weight: normal;
+  outline: none;
+  padding: 7px 8px;
+  width: 100%;
+}
+
+.CodexInput:focus,
+.CodexTextArea:focus {
+  border-color: var(--FocusBorder, #007fd4);
+}
+
+.CodexTextArea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.CodexStartButton {
+  align-self: flex-end;
+}
+
+.CodexDetailMeta {
+  align-items: flex-start;
+  border-bottom: 1px solid var(--PanelBorder, rgba(128, 128, 128, 0.25));
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+}
+
+.CodexTurn {
+  border-left: 2px solid var(--PanelBorder, rgba(128, 128, 128, 0.35));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 10px;
+}
+
+.CodexTurnHeader {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.CodexTurnStatus,
+.CodexTranscriptLabel {
+  color: var(--DescriptionForeground, #9d9d9d);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.CodexTranscriptItem {
+  background: var(--EditorWidgetBackground, rgba(128, 128, 128, 0.08));
+  border-radius: 4px;
+  padding: 9px;
+}
+
+.CodexTranscriptItemuserMessage {
+  border-left: 2px solid var(--FocusBorder, #007fd4);
+}
+
+.CodexTranscriptItemagentMessage {
+  border-left: 2px solid var(--TestingIconPassed, #73c991);
+}
+
+.CodexTranscriptText {
+  line-height: 1.5;
+  margin: 5px 0 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}

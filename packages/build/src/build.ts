@@ -8,6 +8,7 @@ import esbuild from 'rollup-plugin-esbuild'
 import { root } from './root.ts'
 
 const extension = path.join(root, 'packages', 'extension')
+const node = path.join(root, 'packages', 'node')
 const require = createRequire(import.meta.url)
 const commonjs = require('@rollup/plugin-commonjs') as () => Plugin
 
@@ -20,15 +21,15 @@ fs.copyFileSync(
   join(extension, 'extension.json'),
   join(root, 'dist', 'extension.json'),
 )
-fs.copyFileSync(join(extension, 'trello.css'), join(root, 'dist', 'trello.css'))
-fs.copyFileSync(join(extension, 'trello.svg'), join(root, 'dist', 'trello.svg'))
-fs.copyFileSync(
-  join(extension, 'comments.svg'),
-  join(root, 'dist', 'comments.svg'),
-)
+fs.copyFileSync(join(extension, 'codex.css'), join(root, 'dist', 'codex.css'))
+fs.copyFileSync(join(extension, 'codex.svg'), join(root, 'dist', 'codex.svg'))
+fs.cpSync(node, join(root, 'dist', 'node'), {
+  recursive: true,
+  verbatimSymlinks: true,
+})
 
 const bundle = await rollup({
-  input: join(extension, 'src', 'trelloMain.ts'),
+  input: join(extension, 'src', 'codexMain.ts'),
   external: ['electron', 'node:*'],
   plugins: [
     nodeResolve({
@@ -45,7 +46,7 @@ const bundle = await rollup({
 })
 
 await bundle.write({
-  file: join(root, 'dist', 'dist', 'trelloMain.js'),
+  file: join(root, 'dist', 'dist', 'codexMain.js'),
   format: 'esm',
 })
 

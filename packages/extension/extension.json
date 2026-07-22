@@ -1,142 +1,70 @@
 {
-  "id": "builtin.trello",
-  "name": "Trello",
-  "workerName": "Trello Worker",
-  "description": "Browse Trello boards from Lvce Editor",
-  "repository": "https://github.com/lvce-editor/trello",
-  "browser": "dist/trelloMain.js",
+  "id": "builtin.codex",
+  "name": "Codex",
+  "workerName": "Codex Worker",
+  "description": "Work with local Codex sessions in Lvce Editor",
+  "repository": "https://github.com/lvce-editor/codex",
+  "browser": "dist/codexMain.js",
   "isolated": true,
   "categories": ["Other"],
   "configuration": {
-    "trello.searchEnabled": {
-      "type": "boolean",
-      "default": false
+    "codex.path": {
+      "type": "string",
+      "default": "codex",
+      "description": "Path to the Codex CLI executable."
     },
-    "trello.boardBackgroundEnabled": {
-      "type": "boolean",
-      "default": false
+    "codex.refreshInterval": {
+      "type": "number",
+      "default": 1000,
+      "description": "How often active session statuses are refreshed, in milliseconds."
     }
   },
+  "rpc": [
+    {
+      "id": "builtin.codex.app-server",
+      "type": "node",
+      "name": "Codex App Server",
+      "url": "node/src/codexClient.js"
+    }
+  ],
   "activation": [
-    "onView:trello.views.boards",
-    "onCommand:trello.backToBoards",
-    "onCommand:trello.cancelNewCard",
-    "onCommand:trello.closeCardDetail",
-    "onCommand:trello.logout",
-    "onCommand:trello.openCard",
-    "onCommand:trello.refreshBoards",
-    "onCommand:trello.saveCardDetail",
-    "onCommand:trello.show",
-    "onCommand:trello.startAddCard",
-    "onCommand:trello.submitNewCard",
-    "onCommand:trello.test.useMockData",
-    "onCommand:trello.test.reset",
-    "onCommand:trello.addList",
-    "onCommand:trello.openMockBoard",
-    "onCommand:trello.addCard"
+    "onView:codex.views.sessions",
+    "onCommand:codex.newSession",
+    "onCommand:codex.refresh",
+    "onCommand:codex.show",
+    "onCommand:codex.startSession",
+    "onCommand:codex.stopSession",
+    "onCommand:codex.test.useMockData"
   ],
   "commands": [
-    {
-      "id": "trello.show",
-      "label": "Trello: Show"
-    },
-    {
-      "id": "trello.addList",
-      "label": "Trello: Add List"
-    },
-    {
-      "id": "trello.openMockBoard",
-      "label": "Trello: Open Mock Board"
-    },
-    {
-      "id": "trello.addCard",
-      "label": "Trello: Add Card"
-    },
-    {
-      "id": "trello.backToBoards",
-      "label": "Trello: Back to Boards"
-    },
-    {
-      "id": "trello.cancelNewCard",
-      "label": "Trello: Cancel New Card"
-    },
-    {
-      "id": "trello.closeCardDetail",
-      "label": "Trello: Close Card Detail"
-    },
-    {
-      "id": "trello.logout",
-      "label": "Trello: Sign Out"
-    },
-    {
-      "id": "trello.openCard",
-      "label": "Trello: Open Card"
-    },
-    {
-      "id": "trello.refreshBoards",
-      "label": "Trello: Refresh Boards"
-    },
-    {
-      "id": "trello.saveCardDetail",
-      "label": "Trello: Save Card Detail"
-    },
-    {
-      "id": "trello.startAddCard",
-      "label": "Trello: Add Card"
-    },
-    {
-      "id": "trello.submitNewCard",
-      "label": "Trello: Submit New Card"
-    },
-    {
-      "id": "trello.test.useMockData",
-      "label": "Trello Test: Use Mock Data"
-    },
-    {
-      "id": "trello.test.reset",
-      "label": "Trello Test: Reset"
-    }
+    { "id": "codex.show", "label": "Codex: Show Sessions" },
+    { "id": "codex.newSession", "label": "Codex: New Session" },
+    { "id": "codex.startSession", "label": "Codex: Start Session" },
+    { "id": "codex.stopSession", "label": "Codex: Stop Session" },
+    { "id": "codex.refresh", "label": "Codex: Refresh Sessions" },
+    { "id": "codex.test.useMockData", "label": "Codex Test: Use Mock Data" }
   ],
   "views": [
     {
-      "css": "trello.css",
-      "displayName": "Trello",
-      "id": "trello.views.boards",
-      "title": "Trello",
-      "icon": "trello.svg",
-      "kind": "virtualDom"
+      "css": "codex.css",
+      "displayName": "Codex",
+      "id": "codex.views.sessions",
+      "title": "Codex",
+      "icon": "codex.svg",
+      "kind": "virtualDom",
+      "showSideBarHeader": false
     }
   ],
   "keybindings": [
     {
-      "key": "Alt+Left",
-      "command": "trello.backToBoards",
-      "when": "trello.boardDetailFocus"
-    },
-    {
-      "key": "Ctrl+R",
-      "command": "trello.refreshBoards",
-      "when": "trello.boardsFocus"
+      "key": "Ctrl+N",
+      "command": "codex.newSession",
+      "when": "codex.sessionsFocus"
     },
     {
       "key": "Escape",
-      "command": "trello.closeCardDetail",
-      "when": "trello.cardDetailFocus"
-    },
-    {
-      "key": "Enter",
-      "command": "trello.submitNewCard",
-      "when": "trello.newCardInputFocus"
-    },
-    {
-      "key": "Escape",
-      "command": "trello.cancelNewCard",
-      "when": "trello.newCardInputFocus"
-    },
-    {
-      "key": "Ctrl+S",
-      "command": "trello.saveCardDetail",
-      "when": "trello.cardDescriptionFocus"
+      "command": "codex.show",
+      "when": "codex.sessionDetailFocus"
     }
   ]
 }

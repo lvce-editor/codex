@@ -9,133 +9,90 @@ export interface TreeNode {
   readonly node: VirtualDomNode
 }
 
-export const textNode = (value: string): TreeNode => {
-  return {
-    children: [],
-    node: text(value),
-  }
-}
+export const textNode = (value: string): TreeNode => ({
+  children: [],
+  node: text(value),
+})
 
 export const node = (
   type: number,
   properties: Readonly<Record<string, unknown>> = {},
   children: readonly TreeNode[] = [],
-): TreeNode => {
-  return {
-    children,
-    node: {
-      ...properties,
-      childCount: children.length,
-      type,
-    },
-  }
-}
+): TreeNode => ({
+  children,
+  node: { ...properties, childCount: children.length, type },
+})
+
+export const element = (
+  type: number,
+  className: string,
+  children: readonly TreeNode[],
+  properties: Readonly<Record<string, unknown>> = {},
+): TreeNode => node(type, { className, ...properties }, children)
 
 export const div = (
   className: string,
   children: readonly TreeNode[],
-): TreeNode => {
-  return node(VirtualDomElements.Div, { className }, children)
-}
+  properties: Readonly<Record<string, unknown>> = {},
+): TreeNode => element(VirtualDomElements.Div, className, children, properties)
 
-export const label = (text: string): TreeNode => {
-  return node(VirtualDomElements.Label, {}, [textNode(text)])
-}
+export const span = (className: string, value: string): TreeNode =>
+  element(VirtualDomElements.Span, className, [textNode(value)])
 
-export const form = (
-  name: string,
+export const heading = (
+  level: 1 | 2 | 3,
   className: string,
-  children: readonly TreeNode[],
+  value: string,
 ): TreeNode => {
-  return node(
-    VirtualDomElements.Form,
-    {
-      className,
-      name,
-      onSubmit: 'handleSubmit',
-    },
-    children,
-  )
+  const types = {
+    1: VirtualDomElements.H1,
+    2: VirtualDomElements.H2,
+    3: VirtualDomElements.H3,
+  }
+  return element(types[level], className, [textNode(value)])
 }
+
+export const paragraph = (className: string, value: string): TreeNode =>
+  element(VirtualDomElements.P, className, [textNode(value)])
 
 export const button = (
   name: string,
   label: string,
-  className = 'TrelloButton',
-): TreeNode => {
-  return node(
+  className = 'CodexButton',
+): TreeNode =>
+  node(
     VirtualDomElements.Button,
-    {
-      className,
-      name,
-      onClick: 'handleClick',
-    },
+    { className, name, onClick: 'handleClick' },
     [textNode(label)],
   )
-}
 
 export const input = (
   name: string,
   value: string,
   placeholder: string,
-  inputType?: string,
-): TreeNode => {
-  return node(VirtualDomElements.Input, {
-    className: 'TrelloInput',
-    ...(inputType && { inputType }),
+): TreeNode =>
+  node(VirtualDomElements.Input, {
+    className: 'CodexInput',
     name,
-    onBlur: 'handleBlur',
-    onFocus: 'handleFocus',
     onInput: 'handleInput',
     placeholder,
     value,
   })
-}
 
 export const textArea = (
   name: string,
   value: string,
   placeholder: string,
-): TreeNode => {
-  return node(VirtualDomElements.TextArea, {
-    className: 'TrelloTextArea',
+): TreeNode =>
+  node(VirtualDomElements.TextArea, {
+    className: 'CodexTextArea',
     name,
-    onBlur: 'handleBlur',
-    onFocus: 'handleFocus',
     onInput: 'handleInput',
     placeholder,
     value,
   })
-}
 
-export const image = (
-  className: string,
-  src: string,
-  alt: string,
-): TreeNode => {
-  return node(VirtualDomElements.Img, {
-    alt,
-    className,
-    src,
-  })
-}
-
-export const link = (
-  className: string,
-  href: string,
-  text: string,
-): TreeNode => {
-  return node(
-    VirtualDomElements.A,
-    {
-      className,
-      href,
-      target: '_blank',
-    },
-    [textNode(text)],
-  )
-}
-
-export const flatten = (tree: TreeNode): readonly VirtualDomNode[] => {
-  return [tree.node, ...tree.children.flatMap(flatten)]
-}
+export const flatten = (tree: TreeNode): readonly VirtualDomNode[] => [
+  tree.node,
+  ...tree.children.flatMap(flatten),
+]

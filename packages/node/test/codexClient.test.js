@@ -1,0 +1,101 @@
+import assert from 'node:assert/strict'
+import { afterEach, test } from 'node:test'
+import { CodexAppServerClient } from '../src/codexClient.js'
+
+const clients = new Set()
+
+afterEach(() => {
+  for (const client of clients) {
+    client.stop()
+  }
+  clients.clear()
+})
+
+const createThread = (number, status = { type: 'idle' }) => ({
+  cliVersion: 'mock-1.0.0',
+  createdAt: 1_700_000_000 + number,
+  cwd: `/workspace/project-${number}`,
+  id: `thread-${number}`,
+  name: `Session ${number}`,
+  preview: `Task ${number}`,
+  status,
+  turns: [],
+  updatedAt: 1_700_000_000 + number,
+})
+
+const createClient = (data) => {
+  const client = new CodexAppServerClient()
+  client.useMockData(data)
+  clients.add(client)
+  return client
+}
+
+test('lists one Codex session', async () => {
+  const client = createClient({ threads: [createThread(1)] })
+
+  const sessions = await client.listSessions()
+
+  assert.equal(sessions.length, 1)
+  assert.equal(sessions[0].id, 'thread-1')
+  assert.deepEqual(sessions[0].status, { type: 'idle' })
+})
+
+test('paginates through 100 Codex sessions', async () => {
+  const threads = Array.from({ length: 100 }, (_, index) =>
+    createThread(index + 1),
+  )
+  const client = createClient({ pageSize: 7, threads })
+
+  const sessions = await client.listSessions()
+
+  assert.equal(sessions.length, 100)
+  assert.equal(sessions.at(-1).id, 'thread-100')
+})
+
+test('reads session turns and transcript items', async () => {
+  const thread = createThread(1)
+  thread.turns = [
+    {
+      completedAt: 1_700_000_002,
+      error: null,
+      id: 'turn-1',
+      items: [
+        {
+          content: [{ text: 'Fix the tests', type: 'text' }],
+          id: 'item-1',
+          type: 'userMessage',
+        },
+        { id: 'item-2', text: 'Tests fixed.', type: 'agentMessage' },
+      ],
+      startedAt: 1_700_000_001,
+      status: 'completed',
+    },
+  ]
+  const client = createClient({ threads: [thread] })
+
+  const result = await client.readSession('thread-1')
+
+  assert.equal(result.turns.length, 1)
+  assert.equal(result.turns[0].items[1].text, 'Tests fixed.')
+})
+
+test('starts and interrupts a session', async () => {
+  const client = createClient({ threads: [] })
+
+  const started = await client.startSession({
+    cwd: '/workspace/new-project',
+    prompt: 'Create a readme',
+  })
+  const active = await client.readSession(started.id)
+
+  assert.equal(active.cwd, '/workspace/new-project')
+  assert.deepEqual(active.status, { activeFlags: [], type: 'active' })
+  assert.equal(active.turns[0].status, 'inProgress')
+  assert.equal(active.turns[0].items[0].content[0].text, 'Create a readme')
+
+  await client.stopSession(started.id)
+  const stopped = await client.readSession(started.id)
+
+  assert.deepEqual(stopped.status, { type: 'idle' })
+  assert.equal(stopped.turns[0].status, 'interrupted')
+})

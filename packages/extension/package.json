@@ -1,8 +1,8 @@
 {
-  "name": "builtin.trello",
+  "name": "builtin.codex",
   "version": "0.0.0-dev",
-  "description": "Trello extension for Lvce Editor",
-  "main": "dist/trelloMain.js",
+  "description": "Codex integration for Lvce Editor",
+  "main": "dist/codexMain.js",
   "scripts": {
     "test": "node --unhandled-rejections=warn --experimental-vm-modules ./node_modules/jest/bin/jest.js --detectOpenHandles --forceExit",
     "test:watch": "node --unhandled-rejections=warn --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch"
