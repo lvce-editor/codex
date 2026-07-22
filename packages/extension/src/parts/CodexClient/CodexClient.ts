@@ -13,6 +13,7 @@ export interface CodexClient {
     options: Readonly<StartSessionOptions>,
   ) => Promise<CodexThread>
   readonly stopSession: (threadId: string) => Promise<void>
+  readonly useMockData: (data: Readonly<MockCodexData>) => Promise<void>
 }
 
 interface NodeRpc {
@@ -60,6 +61,9 @@ export const createCodexClient = async (
       rpc.invoke('Codex.startSession', startOptions),
     stopSession: async (threadId): Promise<void> => {
       await rpc.invoke('Codex.stopSession', threadId)
+    },
+    useMockData: async (data): Promise<void> => {
+      await rpc.invoke('Codex.test.useMockData', data)
     },
   }
 }

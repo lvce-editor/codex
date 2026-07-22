@@ -25,23 +25,6 @@ export const activate = async (): Promise<void> => {
     },
     id: 'codex.show',
   })
-  registerCommand({
-    execute: () => CodexView.newSessionActiveInstance(),
-    id: 'codex.newSession',
-  })
-  registerCommand({
-    execute: () => CodexView.refreshActiveInstance(),
-    id: 'codex.refresh',
-  })
-  registerCommand({
-    execute: () => CodexView.startSessionActiveInstance(),
-    id: 'codex.startSession',
-  })
-  registerCommand({
-    execute: (threadId?: string) =>
-      CodexView.stopSessionActiveInstance(threadId),
-    id: 'codex.stopSession',
-  })
 }
 
 export const deactivate = (): void => {}

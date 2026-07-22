@@ -10,7 +10,7 @@ export const name = 'codex.virtual-dom-view.finished'
 export const test: Test = async ({ Command, expect, Locator }) => {
   await useMockDataAndShowCodex(Command, createSessions(1))
 
-  const status = Locator('[name="status:thread-1"]')
+  const status = Locator('.CodexStatus')
   const stop = Locator('button[name="stop:thread-1"]')
   await expect(status).toHaveText('Finished')
   await expect(stop).toHaveCount(0)

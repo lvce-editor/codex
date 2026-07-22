@@ -12,8 +12,20 @@ export const view: View<ActiveCodexViewInstance> = {
       instance.newSession()
       return instance
     },
+    'codex.openSession': async (instance, threadId: string) => {
+      await instance.openSession(threadId)
+      return instance
+    },
     'codex.refresh': async (instance) => {
       await instance.refresh()
+      return instance
+    },
+    'codex.startSession': async (instance) => {
+      await instance.startSession()
+      return instance
+    },
+    'codex.stopSession': async (instance, threadId?: string) => {
+      await instance.stopSession(threadId)
       return instance
     },
   },
@@ -25,10 +37,4 @@ export const view: View<ActiveCodexViewInstance> = {
   title: 'Codex',
 }
 
-export {
-  newSessionActiveInstance,
-  refreshActiveInstance,
-  startSessionActiveInstance,
-  stopSessionActiveInstance,
-  useMockData,
-} from './CreateInstance.ts'
+export { useMockData } from './CreateInstance.ts'

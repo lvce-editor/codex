@@ -34,14 +34,13 @@ export const test: Test = async ({ Command, expect, Locator }) => {
   }
   await useMockDataAndShowCodex(Command, [thread])
 
-  const session = Locator('button[name="session:thread-1"]')
-  // eslint-disable-next-line e2e/no-direct-click
-  await session.click()
+  await Command.executeExtensionCommand('codex.openSession', 'thread-1')
 
   const prompt = Locator('text=Fix the flaky test')
   const response = Locator('text=The flaky test is fixed.')
   const back = Locator('button[name="back"]')
+  await expect(back).toBeVisible()
+  await expect(Locator('.CodexTranscriptText')).toHaveCount(2)
   await expect(prompt).toBeVisible()
   await expect(response).toBeVisible()
-  await expect(back).toBeVisible()
 }

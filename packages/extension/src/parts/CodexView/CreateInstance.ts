@@ -15,10 +15,12 @@ import { render, type CodexViewState } from './Render.ts'
 
 export interface ActiveCodexViewInstance extends VirtualDomViewInstance {
   readonly newSession: () => void
+  readonly openSession: (threadId: string) => Promise<void>
   readonly refresh: () => Promise<void>
   readonly reload: () => Promise<void>
   readonly startSession: () => Promise<void>
   readonly stopSession: (threadId?: string) => Promise<void>
+  readonly useMockData: (data: Readonly<MockCodexData>) => Promise<void>
 }
 
 type ClientFactory = () => Promise<CodexClient>
@@ -35,29 +37,8 @@ export const useMockData = async (
   dependencyState.factory = (): Promise<CodexClient> =>
     createCodexClient({ mockData: data })
   await Promise.all(
-    Array.from(activeInstances, (instance) => instance.reload()),
+    Array.from(activeInstances, (instance) => instance.useMockData(data)),
   )
-}
-
-const getActiveInstance = (): ActiveCodexViewInstance | undefined =>
-  [...activeInstances].at(-1)
-
-export const newSessionActiveInstance = (): void => {
-  getActiveInstance()?.newSession()
-}
-
-export const refreshActiveInstance = async (): Promise<void> => {
-  await getActiveInstance()?.refresh()
-}
-
-export const startSessionActiveInstance = async (): Promise<void> => {
-  await getActiveInstance()?.startSession()
-}
-
-export const stopSessionActiveInstance = async (
-  threadId?: string,
-): Promise<void> => {
-  await getActiveInstance()?.stopSession(threadId)
 }
 
 const getErrorMessage = (error: unknown): string =>
@@ -193,19 +174,7 @@ export const createInstance = async (
         }
       }
       if (name.startsWith('session:')) {
-        const threadId = name.slice('session:'.length)
-        state.loading = true
-        requestRerender()
-        try {
-          state.selectedSession = await client.readSession(threadId)
-          state.mode = 'detail'
-          state.error = ''
-        } catch (error) {
-          state.error = getErrorMessage(error)
-        } finally {
-          state.loading = false
-          requestRerender()
-        }
+        await instance.openSession(name.slice('session:'.length))
       } else if (name.startsWith('stop:')) {
         await instance.stopSession(name.slice('stop:'.length))
       }
@@ -215,6 +184,20 @@ export const createInstance = async (
       state.error = ''
       state.prompt = ''
       requestRerender()
+    },
+    async openSession(threadId: string): Promise<void> {
+      state.loading = true
+      requestRerender()
+      try {
+        state.selectedSession = await client.readSession(threadId)
+        state.mode = 'detail'
+        state.error = ''
+      } catch (error) {
+        state.error = getErrorMessage(error)
+      } finally {
+        state.loading = false
+        requestRerender()
+      }
     },
     async refresh(): Promise<void> {
       await loadSessions(true)
@@ -282,6 +265,12 @@ export const createInstance = async (
         state.stoppingThreadId = ''
         requestRerender()
       }
+    },
+    async useMockData(data: Readonly<MockCodexData>): Promise<void> {
+      await client.useMockData(data)
+      state.mode = 'list'
+      state.selectedSession = undefined
+      await loadSessions(true)
     },
   }
 

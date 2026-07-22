@@ -11,7 +11,7 @@ export const name = 'codex.virtual-dom-view.in-progress'
 export const test: Test = async ({ Command, expect, Locator }) => {
   await useMockDataAndShowCodex(Command, createSessions(1, activeStatus))
 
-  const status = Locator('[name="status:thread-1"]')
+  const status = Locator('.CodexStatus')
   const stop = Locator('button[name="stop:thread-1"]')
   await expect(status).toHaveText('In progress')
   await expect(stop).toBeVisible()

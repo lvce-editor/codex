@@ -138,6 +138,7 @@ export class CodexAppServerClient {
 
   configure({ executable = 'codex' }: Readonly<ConfigureOptions> = {}): void {
     this.stop()
+    this.statuses.clear()
     this.executable = executable
     this.args = ['app-server']
     this.environment = {}
@@ -145,6 +146,7 @@ export class CodexAppServerClient {
 
   useMockData(data: Readonly<MockCodexData> = {}): void {
     this.stop()
+    this.statuses.clear()
     this.executable = process.execPath
     this.args = [
       mockCodexPath,
