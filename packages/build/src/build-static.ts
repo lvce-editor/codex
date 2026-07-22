@@ -71,11 +71,7 @@ const assertStaticCodexExtension = async (
   const webExtensionsJson = await readJson<readonly Record<string, unknown>[]>(
     webExtensionsJsonPath,
   )
-  if (webExtensionsJson.some((entry) => entry.id === extensionId)) {
-    throw new Error(
-      `Expected ${webExtensionsJsonPath} to exclude Node-only ${extensionId}`,
-    )
-  }
+  assertCodexExtensionEntry(webExtensionsJson, webExtensionsJsonPath)
 
   const workerPath = path.join(
     commitDir,

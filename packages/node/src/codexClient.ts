@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url'
 type Spawn = (
   command: string,
   arguments_: readonly string[],
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   options: Readonly<
     SpawnOptionsWithoutStdio & {
       readonly stdio: readonly ['pipe', 'pipe', 'pipe']
@@ -45,8 +46,8 @@ interface CodexTurn {
 }
 
 interface CodexThread {
-  readonly [key: string]: unknown
   readonly id: string
+  readonly [key: string]: unknown
   readonly status: ThreadStatus
   readonly turns?: readonly CodexTurn[]
 }
