@@ -1,5 +1,9 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process'
-import type { AppServerMessage, CodexAppServerClientOptions, SpawnProcess } from '../AppServerTypes/AppServerTypes.ts'
+import type {
+  AppServerMessage,
+  CodexAppServerClientOptions,
+  SpawnProcess,
+} from '../AppServerTypes/AppServerTypes.ts'
 import { asRecord, toError } from '../AppServerProtocol/AppServerProtocol.ts'
 import { JsonLineDecoder } from '../JsonLineDecoder/JsonLineDecoder.ts'
 

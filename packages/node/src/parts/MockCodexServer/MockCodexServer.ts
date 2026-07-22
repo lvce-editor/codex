@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import { createInterface } from 'node:readline'
-import type { IncomingMessage, MockData } from '../MockCodexTypes/MockCodexTypes.ts'
+import type {
+  IncomingMessage,
+  MockData,
+} from '../MockCodexTypes/MockCodexTypes.ts'
 import { MockThreadStore } from '../MockThreadStore/MockThreadStore.ts'
 
 export class MockCodexServer {
