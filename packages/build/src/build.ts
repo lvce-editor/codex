@@ -25,7 +25,7 @@ fs.copyFileSync(
 fs.copyFileSync(join(extension, 'codex.css'), join(root, 'dist', 'codex.css'))
 fs.copyFileSync(join(extension, 'codex.svg'), join(root, 'dist', 'codex.svg'))
 await esbuildBuild({
-  bundle: false,
+  bundle: true,
   entryPoints: [
     join(node, 'src', 'codexClient.ts'),
     join(node, 'src', 'mockCodex.ts'),
