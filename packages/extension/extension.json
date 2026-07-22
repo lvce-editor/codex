@@ -46,11 +46,11 @@
   ],
   "views": [
     {
-      "css": "codex.css",
+      "css": "media/codex.css",
       "displayName": "Codex",
       "id": "codex.views.sessions",
       "title": "Codex",
-      "icon": "codex.svg",
+      "icon": "media/codex.svg",
       "kind": "virtualDom",
       "showSideBarHeader": false
     }
