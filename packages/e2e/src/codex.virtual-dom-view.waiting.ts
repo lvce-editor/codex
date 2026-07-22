@@ -19,8 +19,8 @@ export const test: Test = async ({ Command, expect, Locator }) => {
     }),
   ])
 
-  const approval = Locator('.CodexStatus').nth(0)
-  const userInput = Locator('.CodexStatus').nth(1)
+  const userInput = Locator('.CodexStatus').nth(0)
+  const approval = Locator('.CodexStatus').nth(1)
   await expect(approval).toHaveText('Waiting for approval')
   await expect(userInput).toHaveText('Waiting for input')
 }

@@ -66,6 +66,7 @@ export interface StartSessionOptions {
 }
 
 export interface MockCodexData {
+  readonly listDelayMs?: number
   readonly pageSize?: number
   readonly threads?: readonly CodexThread[]
 }

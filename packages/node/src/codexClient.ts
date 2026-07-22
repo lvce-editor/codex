@@ -54,7 +54,6 @@ interface CodexThread {
 
 interface ThreadListResponse {
   readonly data?: readonly CodexThread[]
-  readonly nextCursor?: string | null
 }
 
 interface ThreadReadResponse {
@@ -93,6 +92,7 @@ const mockCodexPath = fileURLToPath(
   ),
 )
 const maximumErrorCharacters = 16_000
+export const maximumSessionCount = 50
 const requestTimeout = 15_000
 
 const asRecord = (value: unknown): Readonly<Record<string, unknown>> => {
@@ -322,23 +322,16 @@ export class CodexAppServerClient {
   }
 
   async listSessions(): Promise<readonly CodexThread[]> {
-    const threads: CodexThread[] = []
-    let cursor: string | null = null
-    do {
-      const response: ThreadListResponse =
-        await this.request<ThreadListResponse>('thread/list', {
-          cursor,
-          limit: 100,
-          sortDirection: 'desc',
-          sortKey: 'updated_at',
-        })
-      const data: readonly CodexThread[] = Array.isArray(response.data)
-        ? response.data
-        : []
-      threads.push(...data.map((thread) => this.mergeStatus(thread)))
-      cursor = response.nextCursor || null
-    } while (cursor)
-    return threads
+    const response = await this.request<ThreadListResponse>('thread/list', {
+      cursor: null,
+      limit: maximumSessionCount,
+      sortDirection: 'desc',
+      sortKey: 'updated_at',
+    })
+    const data: readonly CodexThread[] = Array.isArray(response.data)
+      ? response.data
+      : []
+    return data.map((thread) => this.mergeStatus(thread))
   }
 
   async readSession(threadId: string): Promise<CodexThread> {

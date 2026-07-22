@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { CodexAppServerClient } from '../src/codexClient.ts'
+import {
+  CodexAppServerClient,
+  maximumSessionCount,
+} from '../src/codexClient.ts'
 
 interface TestThread {
   cliVersion: string
@@ -65,14 +68,15 @@ void test('lists one Codex session', async () => {
   assert.deepEqual(sessions[0]?.status, { type: 'idle' })
 })
 
-void test('paginates through 100 Codex sessions', async () => {
+void test('lists only the latest 50 Codex sessions', async () => {
   const threads = Array.from({ length: 100 }, (_, index) =>
     createThread(index + 1),
   )
-  const client = createClient({ pageSize: 7, threads })
+  const client = createClient({ threads })
   const sessions = await client.listSessions()
-  assert.equal(sessions.length, 100)
-  assert.equal(sessions.at(-1)?.id, 'thread-100')
+  assert.equal(sessions.length, maximumSessionCount)
+  assert.equal(sessions[0]?.id, 'thread-100')
+  assert.equal(sessions.at(-1)?.id, 'thread-51')
 })
 
 void test('reads session turns and transcript items', async () => {

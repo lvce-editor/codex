@@ -81,3 +81,22 @@ test('renders a session transcript', () => {
   expect(getText(nodes)).toContain('All tests pass.')
   expect(getText(nodes)).toContain('Finished')
 })
+
+test('renders a loading spinner before sessions are available', () => {
+  const nodes = render({
+    cwd: '',
+    error: '',
+    loading: true,
+    mode: 'list',
+    prompt: '',
+    selectedSession: undefined,
+    sessions: [],
+    starting: false,
+    stoppingThreadId: '',
+  })
+
+  expect(nodes).toContainEqual(
+    expect.objectContaining({ className: 'CodexSpinner' }),
+  )
+  expect(getText(nodes)).toContain('Loading sessions…')
+})
