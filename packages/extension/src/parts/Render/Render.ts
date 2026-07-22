@@ -5,6 +5,7 @@ import type {
   CodexTurn,
   ThreadItem,
 } from '../CodexTypes/CodexTypes.ts'
+import { getDisplayStatus, isActive } from '../Status/Status.ts'
 import {
   button,
   div,
@@ -18,7 +19,6 @@ import {
   textNode,
   type TreeNode,
 } from '../VirtualDom/VirtualDom.ts'
-import { getDisplayStatus, isActive } from '../Status/Status.ts'
 
 const upperCaseLetterRegex = /([A-Z])/g
 
