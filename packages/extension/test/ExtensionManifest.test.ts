@@ -19,6 +19,10 @@ test('declares an isolated Codex view and node app-server rpc', async () => {
     url: 'node/dist/codexClient.js',
   })
   expect(manifest.views).toContainEqual(
-    expect.objectContaining({ id: 'codex.views.sessions' }),
+    expect.objectContaining({
+      css: 'media/codex.css',
+      icon: 'media/codex.svg',
+      id: 'codex.views.sessions',
+    }),
   )
 })

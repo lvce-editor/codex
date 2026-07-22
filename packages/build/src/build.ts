@@ -22,8 +22,9 @@ fs.copyFileSync(
   join(extension, 'extension.json'),
   join(root, 'dist', 'extension.json'),
 )
-fs.copyFileSync(join(extension, 'codex.css'), join(root, 'dist', 'codex.css'))
-fs.copyFileSync(join(extension, 'codex.svg'), join(root, 'dist', 'codex.svg'))
+fs.cpSync(join(extension, 'media'), join(root, 'dist', 'media'), {
+  recursive: true,
+})
 await esbuildBuild({
   bundle: false,
   entryPoints: [
