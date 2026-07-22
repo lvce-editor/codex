@@ -24,7 +24,7 @@ await esbuild.build({
 })
 
 await esbuild.build({
-  bundle: false,
+  bundle: true,
   entryPoints: [
     path.join(node, 'src', 'codexClient.ts'),
     path.join(node, 'src', 'mockCodex.ts'),

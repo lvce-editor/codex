@@ -26,7 +26,7 @@ fs.cpSync(join(extension, 'media'), join(root, 'dist', 'media'), {
   recursive: true,
 })
 await esbuildBuild({
-  bundle: false,
+  bundle: true,
   entryPoints: [
     join(node, 'src', 'codexClient.ts'),
     join(node, 'src', 'mockCodex.ts'),

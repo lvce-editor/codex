@@ -120,3 +120,18 @@ void test('starts and interrupts a session', async () => {
   assert.deepEqual(stopped.status, { type: 'idle' })
   assert.equal(stopped.turns?.[0]?.status, 'interrupted')
 })
+
+void test('reports app-server request errors', async () => {
+  const client = createClient({ threads: [] })
+  await assert.rejects(
+    client.readSession('missing'),
+    new Error('Unknown thread: missing'),
+  )
+})
+
+void test('does not interrupt a session without an active turn', async () => {
+  const client = createClient({ threads: [createThread(1)] })
+  await client.stopSession('thread-1')
+  const session = await client.readSession('thread-1')
+  assert.deepEqual(session.status, { type: 'idle' })
+})
