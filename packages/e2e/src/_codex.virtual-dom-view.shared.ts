@@ -80,9 +80,8 @@ export const useMockDataAndShowCodex = async (
   threads: readonly MockThread[],
   pageSize?: number,
 ): Promise<void> => {
-  await Command.executeExtensionCommand('codex.test.useMockData', {
+  await Command.executeExtensionCommand('codex.show', {
     ...(pageSize && { pageSize }),
     threads,
   })
-  await Command.executeExtensionCommand('codex.show')
 }

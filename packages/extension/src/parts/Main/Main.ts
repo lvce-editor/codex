@@ -17,7 +17,12 @@ export const activate = async (): Promise<void> => {
   await activateExtensionApi()
   registerView(CodexView.view)
   registerCommand({
-    execute: () => executeCommand('SideBar.show', CodexView.viewId, true),
+    execute: async (data?: Readonly<MockCodexData>) => {
+      if (data) {
+        await CodexView.useMockData(data)
+      }
+      return executeCommand('SideBar.show', CodexView.viewId, true)
+    },
     id: 'codex.show',
   })
   registerCommand({
@@ -36,10 +41,6 @@ export const activate = async (): Promise<void> => {
     execute: (threadId?: string) =>
       CodexView.stopSessionActiveInstance(threadId),
     id: 'codex.stopSession',
-  })
-  registerCommand({
-    execute: (data: Readonly<MockCodexData>) => CodexView.useMockData(data),
-    id: 'codex.test.useMockData',
   })
 }
 

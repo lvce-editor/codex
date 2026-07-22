@@ -33,16 +33,14 @@
     "onCommand:codex.refresh",
     "onCommand:codex.show",
     "onCommand:codex.startSession",
-    "onCommand:codex.stopSession",
-    "onCommand:codex.test.useMockData"
+    "onCommand:codex.stopSession"
   ],
   "commands": [
     { "id": "codex.show", "label": "Codex: Show Sessions" },
     { "id": "codex.newSession", "label": "Codex: New Session" },
     { "id": "codex.startSession", "label": "Codex: Start Session" },
     { "id": "codex.stopSession", "label": "Codex: Stop Session" },
-    { "id": "codex.refresh", "label": "Codex: Refresh Sessions" },
-    { "id": "codex.test.useMockData", "label": "Codex Test: Use Mock Data" }
+    { "id": "codex.refresh", "label": "Codex: Refresh Sessions" }
   ],
   "views": [
     {

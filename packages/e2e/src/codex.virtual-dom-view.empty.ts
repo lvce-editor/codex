@@ -9,7 +9,7 @@ export const test: Test = async ({ Command, expect, Locator, Main }) => {
   await useMockDataAndShowCodex(Command, [])
 
   const emptyTitle = Locator('text=No Codex sessions yet')
-  const newSession = Locator('button[name="newSession"]')
+  const newSession = Locator('button[name="newSession"]').first()
   await expect(emptyTitle).toBeVisible()
   await expect(newSession).toBeVisible()
 }
