@@ -12,8 +12,8 @@ export const test: Test = async ({ Command, expect, Locator }) => {
 
   const prompt = Locator('textarea[name="prompt"]')
   await prompt.type('Create a hello world page')
-  // eslint-disable-next-line e2e/no-direct-click
   const startSession = Locator('button[name="startSession"]')
+  // eslint-disable-next-line e2e/no-direct-click
   await startSession.click()
 
   const message = Locator('text=Create a hello world page')

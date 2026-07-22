@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/max-nested-calls */
 import { VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type {
   CodexThread,
@@ -18,6 +19,8 @@ import {
   type TreeNode,
 } from '../VirtualDom/VirtualDom.ts'
 import { getDisplayStatus, isActive } from './Status.ts'
+
+const upperCaseLetterRegex = /([A-Z])/g
 
 export interface CodexViewState {
   cwd: string
@@ -51,7 +54,10 @@ const renderStatus = (thread: Readonly<CodexThread>): TreeNode => {
   )
 }
 
-const renderSession = (thread: Readonly<CodexThread>, stopping: boolean): TreeNode =>
+const renderSession = (
+  thread: Readonly<CodexThread>,
+  stopping: boolean,
+): TreeNode =>
   div('CodexSession', [
     element(
       VirtualDomElements.Button,
@@ -84,21 +90,26 @@ const renderHeader = (title: string, actions: readonly TreeNode[]): TreeNode =>
   ])
 
 const renderList = (state: Readonly<CodexViewState>): TreeNode => {
-  const content = state.sessions.length
-    ? div(
-        'CodexSessionList',
-        state.sessions.map((thread) =>
-          renderSession(thread, state.stoppingThreadId === thread.id),
-        ),
-      )
-    : div('CodexEmpty', [
-        heading(3, 'CodexEmptyTitle', 'No Codex sessions yet'),
-        paragraph(
-          'CodexEmptyText',
-          'Start a session to ask Codex to work in this workspace.',
-        ),
-        button('newSession', 'Start a session', 'CodexButton CodexButtonPrimary'),
-      ])
+  const content =
+    state.sessions.length > 0
+      ? div(
+          'CodexSessionList',
+          state.sessions.map((thread) =>
+            renderSession(thread, state.stoppingThreadId === thread.id),
+          ),
+        )
+      : div('CodexEmpty', [
+          heading(3, 'CodexEmptyTitle', 'No Codex sessions yet'),
+          paragraph(
+            'CodexEmptyText',
+            'Start a session to ask Codex to work in this workspace.',
+          ),
+          button(
+            'newSession',
+            'Start a session',
+            'CodexButton CodexButtonPrimary',
+          ),
+        ])
   return div('CodexRoot', [
     renderHeader('Codex', [
       button('refresh', 'Refresh', 'CodexButton CodexButtonSecondary'),
@@ -127,9 +138,7 @@ const renderNewSession = (state: Readonly<CodexViewState>): TreeNode =>
         textNode('What should Codex do?'),
         textArea('prompt', state.prompt, 'Describe a task for Codex'),
       ]),
-      ...(state.error
-        ? [paragraph('CodexErrorMessage', state.error)]
-        : []),
+      ...(state.error ? [paragraph('CodexErrorMessage', state.error)] : []),
       button(
         'startSession',
         state.starting ? 'Starting…' : 'Start session',
@@ -146,11 +155,11 @@ const getItemText = (item: Readonly<ThreadItem>): string => {
         (entry): entry is { readonly text: string; readonly type: 'text' } =>
           Boolean(
             entry &&
-              typeof entry === 'object' &&
-              'type' in entry &&
-              entry.type === 'text' &&
-              'text' in entry &&
-              typeof entry.text === 'string',
+            typeof entry === 'object' &&
+            'type' in entry &&
+            entry.type === 'text' &&
+            'text' in entry &&
+            typeof entry.text === 'string',
           ),
       )
       .map((entry) => entry.text)
@@ -162,25 +171,22 @@ const getItemText = (item: Readonly<ThreadItem>): string => {
   ) {
     return record.text
   }
-  if (
-    item.type === 'commandExecution' &&
-    typeof record.command === 'string'
-  ) {
+  if (item.type === 'commandExecution' && typeof record.command === 'string') {
     return record.command
   }
-  return item.type.replaceAll(/([A-Z])/g, ' $1').trim()
+  return item.type.replaceAll(upperCaseLetterRegex, ' $1').trim()
 }
 
 const getItemLabel = (item: Readonly<ThreadItem>): string => {
   switch (item.type) {
-    case 'userMessage':
-      return 'You'
     case 'agentMessage':
       return 'Codex'
-    case 'plan':
-      return 'Plan'
     case 'commandExecution':
       return 'Command'
+    case 'plan':
+      return 'Plan'
+    case 'userMessage':
+      return 'You'
     default:
       return 'Activity'
   }
@@ -227,12 +233,10 @@ const renderDetail = (state: Readonly<CodexViewState>): TreeNode => {
       paragraph('CodexDetailCwd', thread.cwd),
       span('CodexDetailId', thread.id),
     ]),
-    ...(state.error
-      ? [paragraph('CodexErrorMessage', state.error)]
-      : []),
+    ...(state.error ? [paragraph('CodexErrorMessage', state.error)] : []),
     div(
       'CodexTranscript',
-      thread.turns.length
+      thread.turns.length > 0
         ? thread.turns.map(renderTurn)
         : [paragraph('CodexEmptyText', 'This session has no turns yet.')],
     ),

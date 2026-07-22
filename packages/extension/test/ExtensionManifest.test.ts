@@ -16,7 +16,7 @@ test('declares an isolated Codex view and node app-server rpc', async () => {
     id: 'builtin.codex.app-server',
     name: 'Codex App Server',
     type: 'node',
-    url: 'node/src/codexClient.js',
+    url: 'node/dist/codexClient.js',
   })
   expect(manifest.views).toContainEqual(
     expect.objectContaining({ id: 'codex.views.sessions' }),

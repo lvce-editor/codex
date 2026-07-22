@@ -9,11 +9,7 @@ export type ThreadStatus =
       readonly type: 'active'
     }
 
-export type TurnStatus =
-  | 'completed'
-  | 'failed'
-  | 'inProgress'
-  | 'interrupted'
+export type TurnStatus = 'completed' | 'failed' | 'inProgress' | 'interrupted'
 
 export interface TextInput {
   readonly text: string

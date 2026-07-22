@@ -24,6 +24,7 @@ interface TestTurn {
 }
 
 const clients = new Set<CodexAppServerClient>()
+const finishedStatus: Readonly<Record<string, unknown>> = { type: 'idle' }
 
 afterEach(() => {
   for (const client of clients) {
@@ -34,7 +35,7 @@ afterEach(() => {
 
 const createThread = (
   number: number,
-  status: Readonly<Record<string, unknown>> = { type: 'idle' },
+  status: Readonly<Record<string, unknown>> = finishedStatus,
 ): TestThread => ({
   cliVersion: 'mock-1.0.0',
   createdAt: 1_700_000_000 + number,
@@ -47,14 +48,16 @@ const createThread = (
   updatedAt: 1_700_000_000 + number,
 })
 
-const createClient = (data: Readonly<Record<string, unknown>>): CodexAppServerClient => {
+const createClient = (
+  data: Readonly<Record<string, unknown>>,
+): CodexAppServerClient => {
   const client = new CodexAppServerClient()
   client.useMockData(data)
   clients.add(client)
   return client
 }
 
-test('lists one Codex session', async () => {
+void test('lists one Codex session', async () => {
   const client = createClient({ threads: [createThread(1)] })
   const sessions = await client.listSessions()
   assert.equal(sessions.length, 1)
@@ -62,7 +65,7 @@ test('lists one Codex session', async () => {
   assert.deepEqual(sessions[0]?.status, { type: 'idle' })
 })
 
-test('paginates through 100 Codex sessions', async () => {
+void test('paginates through 100 Codex sessions', async () => {
   const threads = Array.from({ length: 100 }, (_, index) =>
     createThread(index + 1),
   )
@@ -72,7 +75,7 @@ test('paginates through 100 Codex sessions', async () => {
   assert.equal(sessions.at(-1)?.id, 'thread-100')
 })
 
-test('reads session turns and transcript items', async () => {
+void test('reads session turns and transcript items', async () => {
   const thread = createThread(1)
   thread.turns = [
     {
@@ -97,7 +100,7 @@ test('reads session turns and transcript items', async () => {
   assert.deepEqual(result.turns?.[0], thread.turns[0])
 })
 
-test('starts and interrupts a session', async () => {
+void test('starts and interrupts a session', async () => {
   const client = createClient({ threads: [] })
   const started = await client.startSession({
     cwd: '/workspace/new-project',

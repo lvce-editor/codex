@@ -6,6 +6,9 @@
   "repository": "https://github.com/lvce-editor/codex",
   "browser": "dist/codexMain.js",
   "isolated": true,
+  "compatibility": {
+    "web": false
+  },
   "categories": ["Other"],
   "configuration": {
     "codex.path": {

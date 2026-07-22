@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types, sonarjs/cognitive-complexity */
 import { createInterface } from 'node:readline'
 
 interface MockStatus {
@@ -57,8 +58,10 @@ const threads: MockThread[] = structuredClone(
   Array.isArray(data.threads) ? data.threads : [],
 )
 const pageSize = Math.max(1, Number(data.pageSize) || 100)
-let nextThread = threads.length + 1
-let nextTurn = 1
+const counters = {
+  thread: threads.length + 1,
+  turn: 1,
+}
 
 const send = (message: unknown): void => {
   process.stdout.write(`${JSON.stringify(message)}\n`)
@@ -118,7 +121,7 @@ const handleRequest = (message: Readonly<IncomingMessage>): void => {
       cliVersion: 'mock-1.0.0',
       createdAt: now,
       cwd: typeof params.cwd === 'string' ? params.cwd : '/workspace',
-      id: `thread-new-${nextThread++}`,
+      id: `thread-new-${counters.thread++}`,
       name: null,
       preview: 'New Codex session',
       status: { type: 'idle' },
@@ -149,23 +152,23 @@ const handleRequest = (message: Readonly<IncomingMessage>): void => {
       (item): item is { readonly text: string; readonly type: 'text' } =>
         Boolean(
           item &&
-            typeof item === 'object' &&
-            'type' in item &&
-            item.type === 'text' &&
-            'text' in item &&
-            typeof item.text === 'string',
+          typeof item === 'object' &&
+          'type' in item &&
+          item.type === 'text' &&
+          'text' in item &&
+          typeof item.text === 'string',
         ),
     )
     const text = textInput?.text || ''
     const turn: MockTurn = {
       completedAt: null,
       error: null,
-      id: `turn-new-${nextTurn++}`,
+      id: `turn-new-${counters.turn++}`,
       items: [
         {
           clientId: null,
           content: [{ text, text_elements: [], type: 'text' }],
-          id: `item-user-${nextTurn}`,
+          id: `item-user-${counters.turn}`,
           type: 'userMessage',
         },
       ],

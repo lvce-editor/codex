@@ -60,11 +60,9 @@ export const button = (
   label: string,
   className = 'CodexButton',
 ): TreeNode =>
-  node(
-    VirtualDomElements.Button,
-    { className, name, onClick: 'handleClick' },
-    [textNode(label)],
-  )
+  node(VirtualDomElements.Button, { className, name, onClick: 'handleClick' }, [
+    textNode(label),
+  ])
 
 export const input = (
   name: string,

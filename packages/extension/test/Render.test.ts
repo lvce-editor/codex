@@ -14,7 +14,7 @@ const thread: CodexThread = {
   updatedAt: 1_700_000_001,
 }
 
-const getText = (nodes: readonly Record<string, unknown>[]): string =>
+const getText = (nodes: readonly Readonly<Record<string, unknown>>[]): string =>
   nodes
     .map((node) => (typeof node.text === 'string' ? node.text : ''))
     .join(' ')

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/consistent-class-member-order */
 import {
   spawn,
   type ChildProcessWithoutNullStreams,
@@ -8,9 +9,11 @@ import { fileURLToPath } from 'node:url'
 type Spawn = (
   command: string,
   arguments_: readonly string[],
-  options: SpawnOptionsWithoutStdio & {
-    readonly stdio: readonly ['pipe', 'pipe', 'pipe']
-  },
+  options: Readonly<
+    SpawnOptionsWithoutStdio & {
+      readonly stdio: readonly ['pipe', 'pipe', 'pipe']
+    }
+  >,
 ) => ChildProcessWithoutNullStreams
 
 interface PendingRequest {
@@ -42,10 +45,10 @@ interface CodexTurn {
 }
 
 interface CodexThread {
+  readonly [key: string]: unknown
   readonly id: string
   readonly status: ThreadStatus
   readonly turns?: readonly CodexTurn[]
-  readonly [key: string]: unknown
 }
 
 interface ThreadListResponse {
@@ -83,7 +86,10 @@ interface CodexAppServerClientOptions {
 
 const sourceIsTypeScript = import.meta.url.endsWith('.ts')
 const mockCodexPath = fileURLToPath(
-  new URL(sourceIsTypeScript ? './mockCodex.ts' : './mockCodex.js', import.meta.url),
+  new URL(
+    sourceIsTypeScript ? './mockCodex.ts' : './mockCodex.js',
+    import.meta.url,
+  ),
 )
 const maximumErrorCharacters = 16_000
 const requestTimeout = 15_000
@@ -123,7 +129,7 @@ export class CodexAppServerClient {
   private readonly statuses = new Map<string, ThreadStatus>()
 
   constructor(options: Readonly<CodexAppServerClientOptions> = {}) {
-    this.spawnProcess = options.spawn || (spawn as Spawn)
+    this.spawnProcess = options.spawn || spawn
     this.executable = options.executable || 'codex'
     this.args = options.args || ['app-server']
     this.environment = options.environment || {}
@@ -234,7 +240,7 @@ export class CodexAppServerClient {
   }
 
   private send(message: Readonly<AppServerMessage>): void {
-    const child = this.child
+    const { child } = this
     if (!child?.stdin.writable) {
       throw new Error('Codex app-server is not running')
     }
@@ -316,13 +322,16 @@ export class CodexAppServerClient {
     const threads: CodexThread[] = []
     let cursor: string | null = null
     do {
-      const response = await this.request<ThreadListResponse>('thread/list', {
-        cursor,
-        limit: 100,
-        sortDirection: 'desc',
-        sortKey: 'updated_at',
-      })
-      const data = Array.isArray(response.data) ? response.data : []
+      const response: ThreadListResponse =
+        await this.request<ThreadListResponse>('thread/list', {
+          cursor,
+          limit: 100,
+          sortDirection: 'desc',
+          sortKey: 'updated_at',
+        })
+      const data: readonly CodexThread[] = Array.isArray(response.data)
+        ? response.data
+        : []
       threads.push(...data.map((thread) => this.mergeStatus(thread)))
       cursor = response.nextCursor || null
     } while (cursor)
@@ -358,9 +367,9 @@ export class CodexAppServerClient {
 
   async stopSession(threadId: string): Promise<void> {
     const thread = await this.readSession(threadId)
-    const turn = (thread.turns || [])
-      .toReversed()
-      .find((candidate) => candidate.status === 'inProgress')
+    const turn = (thread.turns || []).findLast(
+      (candidate) => candidate.status === 'inProgress',
+    )
     if (!turn) {
       return
     }
@@ -369,7 +378,7 @@ export class CodexAppServerClient {
   }
 
   stop(): void {
-    const child = this.child
+    const { child } = this
     this.child = undefined
     this.connectPromise = undefined
     if (child && !child.killed) {

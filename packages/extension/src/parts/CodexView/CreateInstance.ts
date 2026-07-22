@@ -1,16 +1,16 @@
+import type { VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import {
-  getWorkspaceFolder,
   getPreference,
+  getWorkspaceFolder,
   type ViewContext,
   type ViewEvent,
   type VirtualDomViewInstance,
 } from '@lvce-editor/api'
-import type { VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
+import type { MockCodexData } from '../CodexTypes/CodexTypes.ts'
 import {
   createCodexClient,
   type CodexClient,
 } from '../CodexClient/CodexClient.ts'
-import type { MockCodexData } from '../CodexTypes/CodexTypes.ts'
 import { render, type CodexViewState } from './Render.ts'
 
 export interface ActiveCodexViewInstance extends VirtualDomViewInstance {
@@ -24,7 +24,7 @@ export interface ActiveCodexViewInstance extends VirtualDomViewInstance {
 type ClientFactory = () => Promise<CodexClient>
 
 const dependencyState: { factory: ClientFactory } = {
-  factory: () => createCodexClient(),
+  factory: (): Promise<CodexClient> => createCodexClient(),
 }
 
 const activeInstances = new Set<ActiveCodexViewInstance>()
@@ -32,8 +32,11 @@ const activeInstances = new Set<ActiveCodexViewInstance>()
 export const useMockData = async (
   data: Readonly<MockCodexData>,
 ): Promise<void> => {
-  dependencyState.factory = () => createCodexClient({ mockData: data })
-  await Promise.all([...activeInstances].map((instance) => instance.reload()))
+  dependencyState.factory = (): Promise<CodexClient> =>
+    createCodexClient({ mockData: data })
+  await Promise.all(
+    Array.from(activeInstances, (instance) => instance.reload()),
+  )
 }
 
 const getActiveInstance = (): ActiveCodexViewInstance | undefined =>
@@ -168,17 +171,28 @@ export const createInstance = async (
       if (event.type !== 'click') {
         return
       }
-      if (name === 'newSession') {
-        instance.newSession()
-      } else if (name === 'cancelNewSession' || name === 'back') {
-        state.mode = 'list'
-        state.error = ''
-        requestRerender()
-      } else if (name === 'refresh') {
-        await instance.refresh()
-      } else if (name === 'startSession') {
-        await instance.startSession()
-      } else if (name.startsWith('session:')) {
+      switch (name) {
+        case 'back':
+        case 'cancelNewSession': {
+          state.mode = 'list'
+          state.error = ''
+          requestRerender()
+          return
+        }
+        case 'newSession': {
+          instance.newSession()
+          return
+        }
+        case 'refresh': {
+          await instance.refresh()
+          return
+        }
+        case 'startSession': {
+          await instance.startSession()
+          return
+        }
+      }
+      if (name.startsWith('session:')) {
         const threadId = name.slice('session:'.length)
         state.loading = true
         requestRerender()

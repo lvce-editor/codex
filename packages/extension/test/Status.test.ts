@@ -3,9 +3,10 @@ import { getDisplayStatus } from '../src/parts/CodexView/Status.ts'
 
 describe('Codex session status', () => {
   test('shows active sessions as in progress', () => {
-    expect(
-      getDisplayStatus({ activeFlags: [], type: 'active' }),
-    ).toEqual({ className: 'Running', label: 'In progress' })
+    expect(getDisplayStatus({ activeFlags: [], type: 'active' })).toEqual({
+      className: 'Running',
+      label: 'In progress',
+    })
   })
 
   test('shows approval and user-input waits', () => {

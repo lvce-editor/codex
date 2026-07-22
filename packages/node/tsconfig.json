@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
+    "allowImportingTsExtensions": true,
+    "assumeChangesOnlyAffectDirectDependencies": true,
     "composite": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "noEmit": true,
+    "noUncheckedSideEffectImports": true,
     "strict": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "skipLibCheck": false,
     "target": "ESNext",
     "types": ["node"]
   },

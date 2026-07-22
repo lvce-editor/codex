@@ -17,7 +17,10 @@ export interface CodexClient {
 
 interface NodeRpc {
   readonly dispose: () => Promise<void>
-  readonly invoke: (method: string, ...params: readonly unknown[]) => Promise<any>
+  readonly invoke: (
+    method: string,
+    ...params: readonly unknown[]
+  ) => Promise<any>
 }
 
 export interface CreateCodexClientOptions {
@@ -55,7 +58,7 @@ export const createCodexClient = async (
     readSession: (threadId) => rpc.invoke('Codex.readSession', threadId),
     startSession: (startOptions) =>
       rpc.invoke('Codex.startSession', startOptions),
-    stopSession: async (threadId) => {
+    stopSession: async (threadId): Promise<void> => {
       await rpc.invoke('Codex.stopSession', threadId)
     },
   }
