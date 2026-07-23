@@ -16,6 +16,7 @@ test('declares an isolated Codex view and node app-server rpc', async () => {
   expect(manifest).toEqual(
     expect.objectContaining({
       browser: 'dist/codexMain.js',
+      contentSecurityPolicy: ["default-src 'none'", "script-src 'self'"],
       id: 'builtin.codex',
       isolated: true,
     }),
