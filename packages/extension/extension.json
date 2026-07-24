@@ -7,7 +7,7 @@
   "browser": "dist/codexMain.js",
   "isolated": true,
   "contentSecurityPolicy": ["default-src 'none'", "script-src 'self'"],
-  "categories": ["Other"],
+  "categories": ["AI", "Chat"],
   "configuration": {
     "codex.path": {
       "type": "string",
