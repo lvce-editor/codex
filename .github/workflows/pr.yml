@@ -6,35 +6,12 @@ on:
       - main
 
 jobs:
-  diagnose-async-loading:
-    name: async-loading attempt ${{ matrix.attempt }}
+  pr:
     strategy:
       fail-fast: false
       matrix:
-        attempt:
-          [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-            20,
-          ]
-    runs-on: ubuntu-24.04
+        os: [ubuntu-24.04, macos-14, windows-2022]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
@@ -55,6 +32,9 @@ jobs:
       - name: npm ci
         run: npm ci
         if: steps.npm-cache.outputs.cache-hit != 'true'
+      - run: npm test
+      - run: npm run type-check
+      - run: npm run lint
       - name: install playwright dependencies
         working-directory: ./packages/e2e
         run: npx playwright install chromium
@@ -62,15 +42,15 @@ jobs:
         env:
           PLAYWRIGHT_BROWSERS_PATH: 0
       - name: Run headless test
-        run: npm run build:extension && npm exec -- test-with-playwright --only-extension=packages/extension --test-path=packages/e2e --filter=codex.virtual-dom-view.async-loading --headless --reuse-page
+        run: npm run e2e:headless
         env:
           PLAYWRIGHT_BROWSERS_PATH: 0
-      - name: Upload e2e artifacts
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: async-loading-${{ matrix.attempt }}
-          path: |
-            .tmp
-            packages/e2e/.tmp
-          if-no-files-found: ignore
+      - name: Build release archive
+        run: node scripts/build.ts
+      - name: Ensure static build dependencies
+        run: node -e "const { createRequire } = require('node:module'); createRequire(process.cwd() + '/packages/server/package.json').resolve('@lvce-editor/shared-process')" || npm ci
+        shell: bash
+      - name: Build static site
+        run: node scripts/build-static.ts
+        env:
+          PATH_PREFIX: auto
