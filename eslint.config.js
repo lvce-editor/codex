@@ -1,11 +1,11 @@
+import { defineConfig } from 'eslint/config'
 import * as config from '@lvce-editor/eslint-config'
-import * as actions from '@lvce-editor/eslint-plugin-github-actions'
 
-export default [
+export default defineConfig([
   ...config.default,
   ...config.recommendedRegex,
   ...config.recommendedTsconfig,
-  ...actions.default,
+  ...config.recommendedActions,
   {
     rules: {
       'github-actions/ci-versions': 'off',
@@ -13,4 +13,4 @@ export default [
       'sonarjs/void-use': 'off',
     },
   },
-]
+])
