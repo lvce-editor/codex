@@ -3,5 +3,8 @@ export const getLegacyNodeRpcPath = (moduleUrl: string): string => {
     ? '../../node/src/codexClient.ts'
     : '../node/dist/codexClient.js'
   const nodeRpcUrl = new URL(relativePath, moduleUrl)
-  return decodeURIComponent(nodeRpcUrl.pathname)
+  const nodeRpcPath = decodeURIComponent(nodeRpcUrl.pathname)
+  return nodeRpcPath.startsWith('/remote/')
+    ? nodeRpcPath.slice('/remote'.length)
+    : nodeRpcPath
 }
