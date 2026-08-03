@@ -10,6 +10,15 @@ test('resolves the bundled node rpc next to the extension bundle', () => {
   )
 })
 
+test('resolves the node source entry from a development bundle', () => {
+  const moduleUrl =
+    'file:///home/user/codex/packages/extension/dist/codexMain.js'
+
+  expect(getLegacyNodeRpcPath(moduleUrl)).toBe(
+    '/home/user/codex/packages/node/src/codexClient.ts',
+  )
+})
+
 test('preserves the leading slash of a Windows drive path', () => {
   const moduleUrl =
     'file:///C:/Program%20Files/LVCE/extensions/builtin.codex/dist/codexMain.js'
