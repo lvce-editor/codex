@@ -57,9 +57,10 @@ jobs:
       - name: npm ci
         run: npm ci
         if: steps.npm-cache.outputs.cache-hit != 'true'
+      - name: Build extension and release archive
+        run: npm run build:extension && node scripts/build.ts
       - run: npm test
       - run: npm run type-check
-      - run: node scripts/build.ts
       - name: Build archive
         shell: bash
         run: |
