@@ -6,10 +6,6 @@ import path, { join } from 'node:path'
 import { type Plugin, rollup } from 'rollup'
 import { build as esbuildBuild } from 'esbuild'
 import esbuildPlugin from 'rollup-plugin-esbuild'
-import {
-  type ExtensionManifest,
-  withProductionNodeEntryPoint,
-} from './extensionManifest.ts'
 import { root } from './root.ts'
 
 const extension = path.join(root, 'packages', 'extension')
@@ -22,12 +18,9 @@ fs.rmSync(join(root, 'dist'), { recursive: true, force: true })
 fs.mkdirSync(path.join(root, 'dist'))
 
 fs.copyFileSync(join(root, 'README.md'), join(root, 'dist', 'README.md'))
-const extensionManifest = JSON.parse(
-  fs.readFileSync(join(extension, 'extension.json'), 'utf8'),
-) as ExtensionManifest
-fs.writeFileSync(
+fs.copyFileSync(
+  join(extension, 'extension.json'),
   join(root, 'dist', 'extension.json'),
-  `${JSON.stringify(withProductionNodeEntryPoint(extensionManifest), undefined, 2)}\n`,
 )
 fs.cpSync(join(extension, 'media'), join(root, 'dist', 'media'), {
   recursive: true,
@@ -36,8 +29,13 @@ await esbuildBuild({
   bundle: true,
   entryPoints: [
     join(node, 'src', 'codexClient.ts'),
+    join(node, 'src', 'codexProcess.ts'),
     join(node, 'src', 'mockCodex.ts'),
   ],
+  banner: {
+    js: "import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);",
+  },
+  external: ['electron', 'node:*'],
   format: 'esm',
   outdir: join(root, 'dist', 'node', 'dist'),
   platform: 'node',

@@ -4,7 +4,6 @@ import type {
   MockCodexData,
   StartSessionOptions,
 } from '../CodexTypes/CodexTypes.ts'
-import { getLegacyNodeRpcPath } from '../GetLegacyNodeRpcPath/GetLegacyNodeRpcPath.ts'
 
 export interface CodexClient {
   readonly dispose: () => Promise<void>
@@ -34,8 +33,6 @@ export interface CreateCodexClientOptions {
 const createDefaultRpc = (): Promise<NodeRpc> => {
   return createNodeRpc({
     id: 'builtin.codex.app-server',
-    legacyName: 'Codex App Server',
-    legacyPath: getLegacyNodeRpcPath(import.meta.url),
   })
 }
 

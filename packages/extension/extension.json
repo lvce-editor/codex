@@ -23,9 +23,9 @@
   "rpc": [
     {
       "id": "builtin.codex.app-server",
-      "type": "node",
+      "type": "node-process",
       "name": "Codex App Server",
-      "url": "../node/src/codexClient.ts"
+      "url": "node/dist/codexProcess.js"
     }
   ],
   "activation": [

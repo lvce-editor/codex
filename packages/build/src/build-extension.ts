@@ -27,8 +27,13 @@ await esbuild.build({
   bundle: true,
   entryPoints: [
     path.join(node, 'src', 'codexClient.ts'),
+    path.join(node, 'src', 'codexProcess.ts'),
     path.join(node, 'src', 'mockCodex.ts'),
   ],
+  banner: {
+    js: "import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);",
+  },
+  external: ['electron', 'node:*'],
   format: 'esm',
   outdir: path.join(extension, 'node', 'dist'),
   platform: 'node',

@@ -4,13 +4,11 @@ import { readFile } from 'node:fs/promises'
 test('declares an isolated Codex view and node app-server rpc', async () => {
   const manifestUrl = new URL('../extension.json', import.meta.url)
   const manifest = JSON.parse(await readFile(manifestUrl, 'utf8'))
-  const nodePackageUrl = new URL('../../node/package.json', import.meta.url)
-  const nodePackage = JSON.parse(await readFile(nodePackageUrl, 'utf8'))
   const nodeRpc = {
     id: 'builtin.codex.app-server',
     name: 'Codex App Server',
-    type: 'node',
-    url: '../node/src/codexClient.ts',
+    type: 'node-process',
+    url: 'node/dist/codexProcess.js',
   }
 
   expect(manifest).toEqual(
@@ -22,8 +20,8 @@ test('declares an isolated Codex view and node app-server rpc', async () => {
     }),
   )
   expect(manifest.rpc).toContainEqual(nodeRpc)
-  expect(new URL(nodeRpc.url, manifestUrl)).toEqual(
-    new URL(nodePackage.main, nodePackageUrl),
+  expect(new URL(nodeRpc.url, manifestUrl).pathname).toContain(
+    '/packages/extension/node/dist/codexProcess.js',
   )
   expect(manifest.views).toContainEqual(
     expect.objectContaining({
