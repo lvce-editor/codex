@@ -1,4 +1,5 @@
-import type { View } from '@lvce-editor/api'
+import type { InstanceView } from '@lvce-editor/api'
+import type { CodexViewState } from '../Render/Render.ts'
 import {
   createInstance,
   type ActiveCodexViewInstance,
@@ -6,7 +7,10 @@ import {
 
 export const viewId = 'codex.views.sessions'
 
-export const view: View<ActiveCodexViewInstance> = {
+export const view: InstanceView<
+  ActiveCodexViewInstance,
+  Readonly<CodexViewState>
+> = {
   commands: {
     'codex.newSession': (instance) => {
       instance.newSession()
@@ -33,9 +37,11 @@ export const view: View<ActiveCodexViewInstance> = {
   },
   create: createInstance,
   displayName: 'Codex',
+  getComponentState: (instance) => instance.getComponentState(),
   icon: 'sparkle',
   id: viewId,
   kind: 'virtualDom',
+  setComponentState: (instance, state) => instance.setComponentState(state),
   title: 'Codex',
 }
 

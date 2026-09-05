@@ -14,10 +14,12 @@ import {
 import { render, type CodexViewState } from '../Render/Render.ts'
 
 export interface ActiveCodexViewInstance extends VirtualDomViewInstance {
+  readonly getComponentState: () => CodexViewState
   readonly newSession: () => void
   readonly openSession: (threadId: string) => Promise<void>
   readonly refresh: () => Promise<void>
   readonly reload: () => Promise<void>
+  readonly setComponentState: (state: Readonly<CodexViewState>) => void
   readonly startSession: () => Promise<void>
   readonly stopSession: (threadId?: string) => Promise<void>
   readonly useMockData: (data: Readonly<MockCodexData>) => Promise<void>
@@ -52,7 +54,7 @@ const getRefreshInterval = async (): Promise<number> => {
 export const createInstance = async (
   context?: ViewContext,
 ): Promise<ActiveCodexViewInstance> => {
-  const state: CodexViewState = {
+  let state: CodexViewState = {
     cwd: '',
     error: '',
     loading: true,
@@ -151,6 +153,9 @@ export const createInstance = async (
       }
       await disposeClient()
     },
+    getComponentState(): CodexViewState {
+      return state
+    },
     getContext(): Readonly<Record<string, boolean>> {
       return {
         'codex.sessionDetailFocus': state.mode === 'detail',
@@ -244,6 +249,9 @@ export const createInstance = async (
     },
     render(): readonly VirtualDomNode[] {
       return render(state)
+    },
+    setComponentState(newState: Readonly<CodexViewState>): void {
+      state = newState
     },
     async startSession(): Promise<void> {
       const prompt = state.prompt.trim()
