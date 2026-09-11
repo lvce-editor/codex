@@ -1,6 +1,7 @@
 {
   "id": "builtin.codex",
   "name": "Codex",
+  "icon": "media/codex.svg",
   "workerName": "Codex Worker",
   "description": "Work with local Codex sessions in Lvce Editor",
   "repository": "https://github.com/lvce-editor/codex",
