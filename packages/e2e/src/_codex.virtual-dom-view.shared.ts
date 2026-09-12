@@ -2,6 +2,31 @@ import type { TestApi } from '@lvce-editor/test-with-playwright'
 
 type Command = TestApi['Command']
 
+interface ComponentInfo {
+  readonly moduleId: string
+  readonly uid: number
+}
+
+export const setPrompt = async (
+  Command: Command,
+  value: string,
+): Promise<void> => {
+  const components = (await Command.execute(
+    'ComponentState.getComponents',
+  )) as readonly ComponentInfo[]
+  const component = components.find((item) => item.moduleId === 'ExtensionView')
+  if (!component) {
+    throw new Error('Expected Codex extension view')
+  }
+  await Command.execute(
+    'Viewlet.executeViewletCommand',
+    component.uid,
+    'handleInput',
+    'prompt',
+    value,
+  )
+}
+
 export interface MockOptions {
   readonly listDelayMs?: number
   readonly pageSize?: number
