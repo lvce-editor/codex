@@ -1,13 +1,18 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 // eslint-disable-next-line e2e/no-imports
-import { useMockDataAndShowCodex } from './_codex.virtual-dom-view.shared.ts'
+import {
+  setPrompt,
+  useMockDataAndShowCodex,
+} from './_codex.virtual-dom-view.shared.ts'
 
 export const name = 'codex.virtual-dom-view.start-session-trims-prompt'
 
 export const test: Test = async ({ Command, expect, Locator }) => {
   await useMockDataAndShowCodex(Command, [])
   await Command.executeExtensionCommand('codex.newSession')
-  await Locator('textarea[name="prompt"]').type('  Trim this task  ')
+  const prompt = Locator('textarea[name="prompt"]')
+  await expect(prompt).toBeVisible()
+  await setPrompt(Command, '  Trim this task  ')
   await Command.executeExtensionCommand('codex.startSession')
 
   const transcript = Locator('.CodexTranscriptText')
