@@ -92,7 +92,6 @@ export const useMockDataAndShowCodex = async (
     threads,
   })
   if (waitForData) {
-    await new Promise((resolve) => setTimeout(resolve, 100))
     await Command.executeExtensionCommand('codex.refresh')
   }
 }

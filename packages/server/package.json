@@ -4,7 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "node ../../node_modules/@lvce-editor/server/bin/server.js --only-extension=../extension --test-path=../e2e"
+    "dev": "node ../../node_modules/@lvce-editor/server/bin/server.js --only-extension=../extension --test-path=../e2e",
+    "postinstall": "node src/postinstall.js",
+    "test": "node --test test/*.test.js"
   },
   "keywords": [],
   "author": "",
