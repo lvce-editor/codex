@@ -9,7 +9,7 @@
     "test": "node --test test/*.test.ts"
   },
   "dependencies": {
-    "@lvce-editor/rpc": "^6.19.2"
+    "@lvce-editor/rpc": "^6.19.3"
   },
   "devDependencies": {
     "@types/node": "^26.1.2"
