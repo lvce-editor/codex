@@ -42,6 +42,8 @@ jobs:
       - name: npm ci
         run: npm ci
         if: steps.npm-cache.outputs.cache-hit != 'true'
+      - name: Build extension and release archive
+        run: npm run build:extension && node scripts/build.ts
       - run: npm test
       - run: npm run type-check
       - run: npm run lint
@@ -55,6 +57,9 @@ jobs:
         run: npm run e2e:headless
         env:
           PLAYWRIGHT_BROWSERS_PATH: 0
+      - name: Ensure static build dependencies
+        run: node -e "const { createRequire } = require('node:module'); createRequire(process.cwd() + '/packages/server/package.json').resolve('@lvce-editor/shared-process')" || npm ci
+        shell: bash
       - name: Build static site
         run: node scripts/build-static.ts
         env:
