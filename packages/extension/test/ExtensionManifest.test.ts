@@ -7,6 +7,7 @@ test('declares an isolated Codex view and node app-server rpc', async () => {
   const nodeRpc = {
     id: 'builtin.codex.app-server',
     name: 'Codex App Server',
+    onRemote: 'runOnRemote',
     type: 'node-process',
     url: 'node/dist/codexProcess.js',
   }
