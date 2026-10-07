@@ -26,6 +26,7 @@
       "id": "builtin.codex.app-server",
       "type": "node-process",
       "name": "Codex App Server",
+      "onRemote": "runOnRemote",
       "url": "node/dist/codexProcess.js"
     }
   ],
